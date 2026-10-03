@@ -1,0 +1,91 @@
+name: Apply SOAForge ISO-810 correction
+
+on:
+  push:
+    branches:
+      - docs/fix-soaforge-iso810
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: docs/fix-soaforge-iso810
+          fetch-depth: 0
+
+      - name: Correct academic continuity
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('README.md')
+          text = path.read_text(encoding='utf-8')
+
+          text = text.replace(
+              '> Este repositorio se mantiene separado de [**SOAForge — track ISO-815**](https://github.com/Jairo0811/SOA-Forge), aunque ambos comparten contexto académico dentro de ISO-815. Esta referencia a SOAForge corresponde exclusivamente a ISO-815.',
+              '> Este repositorio se mantiene separado de [**SOAForge**](https://github.com/Jairo0811/SOA-Forge). **SOAForge corresponde exclusivamente a ISO-810**, mientras BonitaSoft corresponde exclusivamente a **ISO-815**.'
+          )
+
+          start = text.index('## 🧭 Continuidad académica')
+          end = text.index('\n## 🎯 Alcance del primer parcial', start)
+          section = '''## 🧭 Continuidad académica
+
+BonitaSoft presenta continuidad por estudiante, continuidad por profesor y una relación académica paralela con SOAForge durante el mismo período, pero en **asignaturas diferentes**.
+
+### 👥 Continuidad por estudiante
+
+**Eliandres Rodriguez Cepeda (A00112070)** participó previamente junto a Francis Jairo Matias Rosario en [**Kognia**](https://github.com/Jairo0811/Kognia), correspondiente a **Gestión de Sitios Web (ISO-700)** durante **Mayo - Agosto 2024**. En **Septiembre - Diciembre 2026**, ambos vuelven a coincidir en **BonitaSoft**, correspondiente a **Integración de Aplicaciones con Tecnología Open Source (ISO-815)**.
+
+| Orden | Asignatura | Proyecto | Período |
+|---:|---|---|---|
+| 1 | Gestión de Sitios Web (ISO-700) | [**Kognia**](https://github.com/Jairo0811/Kognia) | Mayo - Agosto 2024 |
+| 2 | Integración de Aplicaciones con Tecnología Open Source (ISO-815) | **BonitaSoft** | Septiembre - Diciembre 2026 |
+
+> **Eliandres participa en BonitaSoft (ISO-815) y no forma parte de SOAForge. SOAForge corresponde a ISO-810.**
+
+### 👨‍🏫 Continuidad por profesor
+
+El profesor **Juan Pablo Valdez Reyes** impartió previamente **Desarrollo de Software con Tecnología Open Source 2 (ISO-715)**, asignatura asociada a [**RentCarRD**](https://github.com/Jairo0811/RentCarRD), durante **Mayo - Agosto 2026**. En el período siguiente aparece como profesor de **SOAForge (ISO-810)** y **BonitaSoft (ISO-815)**.
+
+| Orden | Asignatura | Proyecto | Período |
+|---:|---|---|---|
+| 1 | Desarrollo de Software con Tecnología Open Source 2 (ISO-715) | [**RentCarRD**](https://github.com/Jairo0811/RentCarRD) | Mayo - Agosto 2026 |
+| 2 | Integración de Aplicaciones con Tecnología Propietaria (ISO-810) | [**SOAForge**](https://github.com/Jairo0811/SOA-Forge) | Septiembre - Diciembre 2026 |
+| 3 | Integración de Aplicaciones con Tecnología Open Source (ISO-815) | **BonitaSoft** | Septiembre - Diciembre 2026 |
+
+Esta relación es **docente y formativa**. No implica dependencia técnica entre los proyectos.
+
+### 🔀 Relación paralela con SOAForge
+
+Durante **Septiembre - Diciembre 2026**, BonitaSoft y SOAForge comparten:
+
+- el mismo profesor: **Juan Pablo Valdez Reyes**;
+- el mismo período académico;
+- tres integrantes en común: **Enmanueli Alfonso Rondon Marrero**, **Francis Jairo Matias Rosario** y **Jorge Alexander Minier Terrero**.
+
+Sin embargo, pertenecen a **asignaturas diferentes**:
+
+- **SOAForge → ISO-810 — Integración de Aplicaciones con Tecnología Propietaria**;
+- **BonitaSoft → ISO-815 — Integración de Aplicaciones con Tecnología Open Source**.
+
+**Eliandres Rodriguez Cepeda participa únicamente en BonitaSoft / ISO-815 y no pertenece al equipo de SOAForge / ISO-810.**
+'''
+          path.write_text(text[:start] + section + text[end:], encoding='utf-8')
+          PY
+
+      - name: Commit README update
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git diff --cached --quiet && exit 0
+          git commit -m "docs: correct SOAForge as ISO-810"
+          git push origin HEAD:docs/fix-soaforge-iso810
