@@ -23,7 +23,7 @@ Proyecto académico independiente para la asignatura **ISO-815 — Integración 
 
 > **BonitaSoft corresponde exclusivamente a ISO-815.** No forma parte de ISO-810. En particular, **Eliandres Rodriguez Cepeda participa en ISO-815 y no pertenece a ISO-810**.
 
-> Este repositorio se mantiene separado de [**SOAForge**](https://github.com/Jairo0811/SOA-Forge), aunque ambos comparten contexto académico dentro de ISO-815.
+> Este repositorio se mantiene separado de [**SOAForge — track ISO-815**](https://github.com/Jairo0811/SOA-Forge), aunque ambos comparten contexto académico dentro de ISO-815. Esta referencia a SOAForge corresponde exclusivamente a ISO-815.
 
 ## 🧭 Continuidad académica
 
@@ -31,12 +31,12 @@ BonitaSoft participa en tres relaciones académicas verificables dentro de la co
 
 ### 👥 Continuidad por estudiante
 
-**Eliandres Rodriguez Cepeda (A00112070)** participó previamente junto a Francis Jairo Matias Rosario en [**Kognia**](https://github.com/Jairo0811/Kognia), correspondiente a **Gestión de Sitios Web (ISO-700)** durante **Mayo - Agosto 2024**. En **Septiembre - Diciembre 2026**, ambos vuelven a coincidir en dos entregas distintas de **ISO-815**: BonitaSoft y el track open source de SOAForge.
+**Eliandres Rodriguez Cepeda (A00112070)** participó previamente junto a Francis Jairo Matias Rosario en [**Kognia**](https://github.com/Jairo0811/Kognia), correspondiente a **Gestión de Sitios Web (ISO-700)** durante **Mayo - Agosto 2024**. En **Septiembre - Diciembre 2026**, ambos vuelven a coincidir en dos entregas distintas de **ISO-815**: BonitaSoft y el **track ISO-815 de SOAForge**. **Eliandres no participa en el track ISO-810 de SOAForge.**
 
 | Orden | Asignatura | Proyecto | Período |
 |---:|---|---|---|
 | 1 | Gestión de Sitios Web (ISO-700) | [**Kognia**](https://github.com/Jairo0811/Kognia) | Mayo - Agosto 2024 |
-| 2 | Integración de Aplicaciones con Tecnología Open Source (ISO-815) | [**SOAForge**](https://github.com/Jairo0811/SOA-Forge) | Septiembre - Diciembre 2026 |
+| 2 | Integración de Aplicaciones con Tecnología Open Source (ISO-815) | [**SOAForge — track ISO-815**](https://github.com/Jairo0811/SOA-Forge) | Septiembre - Diciembre 2026 |
 | 3 | Integración de Aplicaciones con Tecnología Open Source (ISO-815) | **BonitaSoft** | Septiembre - Diciembre 2026 |
 
 Las filas 2 y 3 corresponden al **mismo período académico y a proyectos paralelos**, no a una secuencia temporal entre SOAForge y BonitaSoft. **Eliandres participa únicamente en ISO-815; no se le atribuye participación en ISO-810.**
@@ -54,9 +54,9 @@ El profesor **Juan Pablo Valdez Reyes** impartió previamente **Desarrollo de So
 
 Esta relación es **docente y formativa**. No implica que los proyectos sean versiones o dependencias técnicas entre sí.
 
-### 🔀 Relación paralela con SOAForge en ISO-815
+### 🔀 Relación paralela con SOAForge — track ISO-815
 
-BonitaSoft y el track **ISO-815** de SOAForge comparten durante **Septiembre - Diciembre 2026**:
+BonitaSoft y **SOAForge — track ISO-815** comparten durante **Septiembre - Diciembre 2026**:
 
 - la misma asignatura: **Integración de Aplicaciones con Tecnología Open Source (ISO-815)**;
 - el mismo profesor: **Juan Pablo Valdez Reyes**;
