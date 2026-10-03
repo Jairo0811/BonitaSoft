@@ -1,55 +1,107 @@
-# Arquitectura BPM inicial
+# Arquitectura BPM — Demo ISO-815
 
-## Propósito
+## Proceso seleccionado
 
-Definir la arquitectura conceptual del proceso que será implementado en Bonita para ISO-815.
+**Solicitud de acceso a sistema corporativo**.
 
-## Flujo de referencia
+El caso fue elegido porque permite demostrar en un flujo compacto los conceptos de BPM, BPMN, tareas humanas, decisiones e integración de aplicaciones mediante REST.
+
+## Arquitectura lógica
+
+```text
+┌───────────────────┐
+│    Solicitante    │
+└─────────┬─────────┘
+          │ Formulario
+          ▼
+┌───────────────────┐
+│  Bonita Runtime   │
+│                   │
+│ BPMN + BDM        │
+│ Organización      │
+│ Contratos         │
+└─────────┬─────────┘
+          │
+          ▼
+┌───────────────────┐
+│     Aprobador     │
+│  Tarea humana     │
+└─────────┬─────────┘
+          │
+          ▼
+      Gateway
+       /    \
+      /      \
+ Rechazo   Aprobación
+    │          │
+    ▼          ▼
+   Fin    REST Connector
+               │
+               ▼
+     ┌───────────────────┐
+     │ FastAPI Mock API  │
+     │ POST /provision   │
+     │ GET  /audit/{id}  │
+     └─────────┬─────────┘
+               │
+               ▼
+          Cierre / Fin
+```
+
+## Capas
+
+### Presentación
+Formularios/páginas Bonita para captura, revisión y consulta.
+
+### Proceso
+BPMN controla estados, tareas, decisión y ruta de integración.
+
+### Datos
+`SolicitudAcceso` se plantea como objeto principal del BDM.
+
+### Identidad
+Solicitante y aprobador se resuelven mediante organización, roles y actores.
+
+### Integración
+Un REST connector POST consume `demo/mock-api` para simular el aprovisionamiento de acceso en un sistema externo.
+
+### Auditoría
+Bonita mantiene la trazabilidad del caso y la API de demo conserva un registro en memoria accesible por `GET /audit/{request_id}`.
+
+## Flujo
 
 ```text
 Solicitud
    ↓
 Validación
    ↓
-Aprobación humana
+Revisión humana
    ↓
-Decisión
- ┌───────┴────────┐
- ▼                ▼
-Aprobada        Rechazada
- │
- ▼
-Integración / Servicio
- │
- ▼
-Cierre + Auditoría
+¿Aprobada?
+ ┌────┴────────────────┐
+ │                     │
+No                    Sí
+ │                     │
+RECHAZADA         POST /provision
+ │                     │
+Fin              ¿Respuesta OK?
+                  ├─ Sí → COMPLETADA → Fin
+                  └─ No → Resolver error → Reintentar
 ```
 
-## Componentes previstos
+## Separación de entornos
 
-### Actor solicitante
-Inicia el proceso y suministra la información requerida.
+El runtime incluido en Bonita Studio se utiliza solo para desarrollo/pruebas. Una arquitectura real debe separar Development, QA y Production y dimensionar el runtime según concurrencia, carga e integraciones.
 
-### Validación
-Comprueba que la solicitud contenga los datos mínimos y que pueda continuar.
+## Artefactos relacionados
 
-### Aprobador
-Ejecuta una tarea humana y toma una decisión sobre la solicitud.
+- `process/bpmn/PROCESS_SPEC.md`
+- `process/bpmn/solicitud-acceso-reference.bpmn`
+- `process/forms/FORM_SPEC.md`
+- `process/connectors/REST_PROVISIONING.md`
+- `demo/mock-api/`
+- `demo/TEST_CASES.md`
 
-### Gateway de decisión
-Separa la ruta aprobada de la ruta rechazada.
+## Estado
 
-### Integración
-Consume un servicio o API para demostrar integración de aplicaciones.
-
-### Auditoría
-Registra el resultado final, decisiones y evidencias del proceso.
-
-## Principios
-
-- El proceso debe ser demostrable end-to-end.
-- Debe incluir interacción humana real.
-- Debe existir al menos una decisión BPMN.
-- Debe existir al menos una integración con otro servicio o aplicación.
-- Las rutas de error y rechazo deben ser explícitas.
-- La documentación debe corresponder con la implementación real.
+La arquitectura y el servicio de integración de apoyo están definidos en el repositorio. El último paso de ejecución depende de modelar/importar el proceso en la versión concreta de **Bonita Studio** que utilizará el equipo y validar allí contratos, BDM, actores, formularios y connector.
