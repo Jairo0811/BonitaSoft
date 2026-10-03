@@ -1,0 +1,83 @@
+:root {
+  /* Brand */
+  --bs-brand-red: #ff1744;
+  --bs-brand-red-hover: #e3123c;
+  --bs-brand-blue: #2f80ff;
+  --bs-brand-blue-hover: #1e5bff;
+
+  /* Backgrounds */
+  --bs-bg-app: #061a40;
+  --bs-bg-sidebar: #071a45;
+  --bs-bg-topbar: #0a2256;
+  --bs-bg-card: #0d2761;
+  --bs-bg-panel: #102c6b;
+  --bs-bg-card-hover: #15357a;
+  --bs-bg-input: rgba(255, 255, 255, 0.04);
+
+  /* Borders */
+  --bs-border-soft: rgba(47, 128, 255, 0.22);
+  --bs-border-active: #2f80ff;
+  --bs-border-subtle: rgba(255, 255, 255, 0.06);
+
+  /* Text */
+  --bs-text-primary: #ffffff;
+  --bs-text-secondary: #c9d4f2;
+  --bs-text-muted: #8fa6d8;
+
+  /* Semantic */
+  --bs-success: #22c55e;
+  --bs-warning: #f59e0b;
+  --bs-danger: #ef4444;
+  --bs-info: #38bdf8;
+
+  /* Charts */
+  --bs-chart-primary: #2f80ff;
+  --bs-chart-secondary: #ff1744;
+  --bs-chart-success: #22c55e;
+  --bs-chart-warning: #f59e0b;
+  --bs-chart-neutral: #8fa6d8;
+  --bs-chart-grid: rgba(201, 212, 242, 0.12);
+
+  /* Radius */
+  --bs-radius-sm: 10px;
+  --bs-radius-md: 12px;
+  --bs-radius-lg: 16px;
+  --bs-radius-xl: 20px;
+
+  /* Shadows */
+  --bs-shadow-card: 0 10px 30px rgba(0, 0, 0, 0.25);
+  --bs-glow-blue: 0 0 0 1px rgba(47, 128, 255, 0.25), 0 0 18px rgba(47, 128, 255, 0.18);
+  --bs-glow-red: 0 0 0 1px rgba(255, 23, 68, 0.22), 0 0 18px rgba(255, 23, 68, 0.15);
+
+  /* Gradients */
+  --bs-gradient-app: linear-gradient(135deg, #061a40 0%, #0b245b 55%, #123a8a 100%);
+  --bs-gradient-primary: linear-gradient(135deg, #2f80ff 0%, #1e5bff 100%);
+  --bs-gradient-danger: linear-gradient(135deg, #ff1744 0%, #e3123c 100%);
+  --bs-gradient-highlight: linear-gradient(135deg, rgba(47, 128, 255, 0.18) 0%, rgba(255, 23, 68, 0.10) 100%);
+
+  /* Typography */
+  --bs-font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  --bs-font-size-xs: 12px;
+  --bs-font-size-sm: 14px;
+  --bs-font-size-md: 16px;
+  --bs-font-size-lg: 20px;
+  --bs-font-size-xl: 24px;
+  --bs-font-size-2xl: 32px;
+
+  /* Motion */
+  --bs-transition-fast: 140ms ease;
+  --bs-transition-base: 220ms ease;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bs-gradient-app);
+  color: var(--bs-text-primary);
+  font-family: var(--bs-font-family);
+}
+
+* {
+  box-sizing: border-box;
+}
