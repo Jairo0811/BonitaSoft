@@ -1,0 +1,230 @@
+.runtime-button {
+  cursor: pointer;
+  border: 1px solid rgba(34, 197, 94, 0.24);
+}
+
+.runtime-pill.offline {
+  color: #ffd1d9;
+  border-color: rgba(255, 23, 68, 0.35);
+  background: rgba(255, 23, 68, 0.08);
+}
+
+.runtime-pill.offline i {
+  background: #ff1744;
+  box-shadow: 0 0 12px rgba(255, 23, 68, 0.75);
+}
+
+.api-health.api-offline {
+  border-color: rgba(255, 23, 68, 0.35);
+  background: rgba(255, 23, 68, 0.07);
+}
+
+.api-health.api-offline .pulse {
+  background: #ff1744;
+  box-shadow: 0 0 14px rgba(255, 23, 68, 0.7);
+}
+
+.task-row-live {
+  cursor: default;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.mini-action {
+  min-height: 30px;
+  padding: 0 9px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 150ms ease;
+}
+
+.mini-action:disabled {
+  opacity: 0.45;
+  cursor: wait;
+}
+
+.mini-action.approve,
+.mini-action.retry {
+  color: #c7f9d5;
+  border-color: rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.mini-action.approve:hover,
+.mini-action.retry:hover {
+  background: rgba(34, 197, 94, 0.22);
+}
+
+.mini-action.reject {
+  color: #ffd1d9;
+  border-color: rgba(255, 23, 68, 0.38);
+  background: rgba(255, 23, 68, 0.1);
+}
+
+.mini-action.reject:hover {
+  background: rgba(255, 23, 68, 0.2);
+}
+
+.empty-state {
+  margin: 18px 0;
+  color: #8fa6d8;
+  text-align: center;
+  font-size: 12px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(2, 10, 28, 0.78);
+  backdrop-filter: blur(10px);
+}
+
+.request-modal {
+  width: min(680px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  border: 1px solid rgba(47, 128, 255, 0.36);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(47, 128, 255, 0.18), transparent 34%),
+    linear-gradient(180deg, #0c2a66, #061a40);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.5), 0 0 34px rgba(47, 128, 255, 0.16);
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.modal-header h2 {
+  margin: 4px 0 0;
+  color: white;
+  font-size: 24px;
+}
+
+.modal-header > button {
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #c9d4f2;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.request-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 22px 24px 24px;
+}
+
+.request-form label {
+  display: grid;
+  gap: 7px;
+  color: #b9c8e9;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.request-form input,
+.request-form select,
+.request-form textarea {
+  width: 100%;
+  border: 1px solid rgba(47, 128, 255, 0.28);
+  border-radius: 11px;
+  outline: none;
+  color: white;
+  background: rgba(5, 24, 60, 0.72);
+  font: inherit;
+  transition: 150ms ease;
+}
+
+.request-form input,
+.request-form select {
+  min-height: 42px;
+  padding: 0 12px;
+}
+
+.request-form textarea {
+  resize: vertical;
+  min-height: 100px;
+  padding: 11px 12px;
+}
+
+.request-form input:focus,
+.request-form select:focus,
+.request-form textarea:focus {
+  border-color: #2f80ff;
+  box-shadow: 0 0 18px rgba(47, 128, 255, 0.16);
+}
+
+.request-form select option {
+  color: white;
+  background: #0b245b;
+}
+
+.full-field,
+.modal-actions {
+  grid-column: 1 / -1;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.secondary-action {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid rgba(47, 128, 255, 0.35);
+  border-radius: 11px;
+  color: #c9d4f2;
+  background: transparent;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.secondary-action:disabled,
+.primary-action:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+@media (max-width: 780px) {
+  .request-form {
+    grid-template-columns: 1fr;
+  }
+
+  .full-field,
+  .modal-actions {
+    grid-column: auto;
+  }
+
+  .task-row-live {
+    align-items: flex-start;
+  }
+
+  .task-actions {
+    flex-direction: column;
+  }
+}
