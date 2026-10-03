@@ -113,6 +113,48 @@ El repositorio incluye:
 - guion de demo;
 - outline y fuentes de presentación.
 
+## 🧱 Stack tecnológico
+
+> **Estado del stack:** la Mock API y sus pruebas están implementadas y automatizadas. La configuración final del proceso dentro de Bonita Studio todavía requiere ejecución local, por lo que no se presenta como Runtime Verified.
+
+### 🔄 BPM y modelado
+
+<p>
+  <img src="https://img.shields.io/badge/Bonita-BPM-7C3AED?style=flat-square" alt="Bonita BPM" />
+  <img src="https://img.shields.io/badge/BPMN-2.0-2563EB?style=flat-square" alt="BPMN 2.0" />
+</p>
+
+- Bonita / Bonita Studio como plataforma BPM del ejercicio;
+- BPMN 2.0 para el proceso de referencia;
+- BDM, contratos, formularios, actores y conectores documentados para implementación local.
+
+### ⚙️ Integración y Mock API
+
+<p>
+  <img src="https://skillicons.dev/icons?i=python,fastapi" alt="Python y FastAPI" />
+  <img src="https://img.shields.io/badge/OpenAPI-Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black" alt="OpenAPI / Swagger" />
+</p>
+
+- Python;
+- FastAPI;
+- Uvicorn;
+- endpoint REST `/provision` para la demostración de integración;
+- documentación automática OpenAPI / Swagger.
+
+### 🧪 Calidad y DevOps
+
+<p>
+  <img src="https://skillicons.dev/icons?i=docker,git,github,githubactions" alt="Docker, Git, GitHub y GitHub Actions" />
+  <img src="https://img.shields.io/badge/pytest-Testing-0A9EDC?style=flat-square&logo=pytest&logoColor=white" alt="pytest" />
+</p>
+
+- pytest para la Mock API;
+- Docker / Dockerfile para el servicio auxiliar;
+- Git / GitHub;
+- GitHub Actions mediante `mock-api-ci.yml`.
+
+---
+
 ## 🗂️ Estructura
 
 ```text
