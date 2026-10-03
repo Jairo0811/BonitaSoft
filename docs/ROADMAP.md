@@ -1,81 +1,116 @@
 # Roadmap — BonitaSoft ISO-815
 
-## Fase 0 — Inicialización
+## Estado general
 
-**Objetivo:** establecer la base académica, documental y estructural del proyecto.
+La investigación, arquitectura, modelo de referencia, contratos, integración auxiliar, pruebas y material de exposición están **consolidados en el repositorio**.
 
-- [x] Crear repositorio independiente.
-- [x] Definir datos académicos.
-- [x] Registrar integrantes.
-- [x] Definir estructura inicial.
-- [x] Establecer enfoque BPM.
-- [x] Crear documentación base.
+Queda un único gate que no puede validarse solo desde Git/GitHub: ejecutar el proceso dentro de la versión concreta de **Bonita Studio** utilizada por el equipo y capturar las evidencias de runtime.
 
-## Fase 1 — Investigación y selección del proceso
+---
 
-**Objetivo:** documentar Bonita/BPMN y seleccionar el proceso real que se implementará.
+## Fase 0 — Inicialización ✅
 
-- [ ] Investigar conceptos BPM y BPMN.
-- [ ] Documentar capacidades principales de Bonita.
-- [ ] Identificar actores del proceso.
-- [ ] Definir problema y alcance.
-- [ ] Crear flujo AS-IS y propuesta TO-BE.
-- [ ] Definir criterios de éxito.
+- [x] Repositorio independiente.
+- [x] Datos académicos.
+- [x] Integrantes.
+- [x] Estructura documental.
+- [x] Enfoque BPM/SOA.
 
-## Fase 2 — Modelado BPMN
+## Fase 1 — Investigación + proceso ✅
 
-**Objetivo:** construir el proceso formal.
+- [x] Desarrollar los 11 puntos solicitados por la Práctica 3.
+- [x] Investigar SOA y BPM.
+- [x] Documentar historia, características, módulos y componentes.
+- [x] Analizar competidores.
+- [x] Dimensionamiento de referencia para 500 usuarios.
+- [x] Elementos SOA con Bonita.
+- [x] Modelo de costos/TCO para 500 usuarios.
+- [x] Aspectos adicionales: seguridad, extensibilidad, DevOps y auditoría.
+- [x] Seleccionar proceso: Solicitud de acceso a sistema.
+- [x] AS-IS y TO-BE.
+- [x] Actores, datos, reglas y criterios de éxito.
 
-- [ ] Crear pools y lanes.
-- [ ] Modelar eventos de inicio y fin.
-- [ ] Incorporar tareas humanas y automáticas.
-- [ ] Incorporar gateways y reglas de decisión.
-- [ ] Configurar excepciones y rutas alternativas.
-- [ ] Validar el diagrama BPMN.
+## Fase 2 — Modelado BPMN ✅ / Runtime pending
 
-## Fase 3 — Implementación en Bonita
+- [x] Definir eventos de inicio y fin.
+- [x] Definir tarea humana.
+- [x] Definir tarea automática/integración.
+- [x] Gateway aprobado/rechazado.
+- [x] Ruta de error y reintento.
+- [x] Crear especificación formal.
+- [x] Crear BPMN 2.0 de referencia.
+- [ ] Validar el diagrama final dentro de Bonita Studio.
 
-**Objetivo:** convertir el modelo en un proceso ejecutable.
+> El `.bpmn` del repositorio es un artefacto estándar de referencia, no se presenta como el archivo ejecutable final de Bonita.
 
-- [ ] Crear organización y actores.
-- [ ] Configurar variables de negocio.
-- [ ] Crear contratos de entrada.
-- [ ] Implementar formularios.
-- [ ] Configurar tareas humanas.
-- [ ] Implementar reglas del proceso.
+## Fase 3 — Implementación Bonita — Runbook completo 🟡
 
-## Fase 4 — Integraciones
+- [x] Definir organización y actores.
+- [x] Definir Business Data Model.
+- [x] Definir contratos.
+- [x] Definir formularios y validaciones.
+- [x] Definir tarea humana.
+- [x] Definir reglas del gateway.
+- [x] Crear runbook paso a paso.
+- [ ] Aplicar/validar configuración en Bonita Studio.
 
-**Objetivo:** demostrar integración de aplicaciones mediante tecnología open source.
+Documento: `docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md`.
 
-- [ ] Seleccionar servicio o API externa/local.
-- [ ] Implementar connector o llamada REST.
-- [ ] Gestionar respuestas y errores.
-- [ ] Persistir evidencia de la integración.
-- [ ] Documentar arquitectura de integración.
+## Fase 4 — Integración ✅ / Bonita connector pending
 
-## Fase 5 — Pruebas y auditoría
+- [x] Seleccionar API local open source: FastAPI.
+- [x] Implementar `POST /provision`.
+- [x] Implementar `GET /audit/{request_id}`.
+- [x] Health endpoint.
+- [x] Idempotencia por `request_id`.
+- [x] Dockerfile.
+- [x] Documentar payload y respuesta.
+- [x] Documentar manejo de errores.
+- [ ] Configurar y ejecutar el REST Connector dentro de Bonita Studio.
 
-**Objetivo:** validar el proceso end-to-end.
+## Fase 5 — Pruebas y auditoría ✅ / E2E Bonita pending
 
-- [ ] Diseñar casos de prueba.
-- [ ] Probar ruta aprobada.
-- [ ] Probar ruta rechazada.
-- [ ] Probar errores de integración.
-- [ ] Verificar trazabilidad y auditoría.
-- [ ] Registrar evidencias.
+- [x] Diseñar casos de prueba.
+- [x] Crear pruebas automatizadas para la Mock API.
+- [x] Agregar CI de la Mock API.
+- [x] Definir ruta aprobada.
+- [x] Definir ruta rechazada.
+- [x] Definir prueba de API caída.
+- [x] Definir evidencia de auditoría.
+- [ ] Ejecutar casos end-to-end desde Bonita.
+- [ ] Capturar evidencias reales del runtime.
 
-## Fase 6 — Demo y entrega académica
+## Fase 6 — Demo y entrega académica ✅ / ejecución pending
 
-**Objetivo:** preparar la presentación del primer parcial.
+- [x] Guion de demo.
+- [x] Datos de demostración.
+- [x] Outline de presentación.
+- [x] Fuentes para diapositivas.
+- [x] Documentación técnica consolidada.
+- [x] Estructura para evidencias.
+- [ ] Capturas finales de Bonita Studio.
+- [ ] Demo final en el entorno del equipo.
 
-- [ ] Preparar datos de demostración.
-- [ ] Crear guion de demo.
-- [ ] Capturar evidencias.
-- [ ] Completar documentación técnica.
-- [ ] Preparar presentación académica.
-- [ ] Ejecutar demo final.
+---
 
-## Criterio de cierre
+## Criterio de cierre académico
 
-El proyecto se considerará terminado cuando exista un proceso BPMN ejecutable en Bonita con al menos una tarea humana, una decisión, una integración con un servicio y evidencia de trazabilidad end-to-end.
+### Investigación
+
+**Lista.** Los 11 puntos de la Práctica 3 están documentados en `docs/research/`.
+
+### Complemento práctico
+
+**Preparado para ejecución.** El repositorio contiene diseño, contratos, API, Docker, pruebas, CI y runbook.
+
+### Runtime Verified
+
+Solo marcar como **COMPLETO 100% / Runtime Verified** cuando el equipo ejecute en Bonita Studio:
+
+1. ruta aprobada;
+2. ruta rechazada;
+3. REST connector exitoso;
+4. error de integración;
+5. trazabilidad del caso.
+
+No se debe sustituir esta verificación con una afirmación documental.
