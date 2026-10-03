@@ -64,11 +64,17 @@ BonitaSoft y el track **ISO-815** de SOAForge comparten durante **Septiembre - D
 
 La coincidencia es **académica y paralela**. BonitaSoft y SOAForge siguen siendo repositorios y proyectos independientes. El track **ISO-810 de SOAForge tiene un equipo diferente de tres integrantes y no incluye a Eliandres Rodriguez Cepeda**.
 
-## 🎯 Objetivo
+## 🎯 Alcance del primer parcial
 
-Modelar, implementar y demostrar un proceso de negocio real mediante BPMN y Bonita, incluyendo tareas humanas, reglas de decisión, formularios, integración con servicios y trazabilidad del proceso.
+La **Práctica 3** solicita una investigación sobre BonitaSoft que cubre 11 puntos: SOA, BPM, historia, características, módulos, componentes, competidores, infraestructura para 500 usuarios, elementos SOA, costos para 500 usuarios y aspectos adicionales.
 
-## 🔄 Flujo de referencia
+Los 11 puntos están documentados en [`docs/research/`](docs/research/).
+
+Como complemento práctico, el repositorio prepara una demostración BPM para mostrar que Bonita puede actuar como orquestador de personas y servicios, sin convertir la demo en sustituto de la investigación solicitada.
+
+## 🔄 Proceso demostrativo
+
+**Solicitud de acceso a sistema corporativo**:
 
 ```text
 Solicitud
@@ -77,48 +83,98 @@ Validación
    ↓
 Aprobación humana
    ↓
-Decisión
- ┌───────┴────────┐
- ▼                ▼
-Aprobada        Rechazada
- │
- ▼
-Integración / Servicio
- │
- ▼
-Cierre + Auditoría
+¿Aprobada?
+ ┌────┴──────────────────┐
+ ▼                       ▼
+No                      Sí
+ │                       │
+Rechazo             REST /provision
+ │                       │
+ Fin               Cierre + Auditoría
 ```
+
+La integración utiliza una API FastAPI local incluida en `demo/mock-api/`.
+
+## 🧪 Complemento técnico
+
+El repositorio incluye:
+
+- modelo BPMN 2.0 de referencia;
+- especificación de proceso;
+- BDM y contratos propuestos;
+- especificación de formularios;
+- configuración conceptual del REST Connector;
+- Mock API FastAPI;
+- Dockerfile;
+- pruebas automatizadas;
+- GitHub Actions para la Mock API;
+- casos de prueba end-to-end;
+- runbook de implementación en Bonita Studio;
+- guion de demo;
+- outline y fuentes de presentación.
 
 ## 🗂️ Estructura
 
 ```text
 BonitaSoft/
+├── .github/workflows/
+│   └── mock-api-ci.yml
 ├── README.md
 ├── docs/
 │   ├── academic/
-│   ├── research/
 │   ├── architecture/
+│   ├── implementation/
+│   ├── research/          # 11 puntos de la práctica
 │   └── ROADMAP.md
 ├── process/
 │   ├── bpmn/
 │   ├── forms/
 │   └── connectors/
 ├── demo/
+│   ├── mock-api/
+│   ├── DEMO_SCRIPT.md
+│   └── TEST_CASES.md
+├── presentation/
+│   ├── OUTLINE.md
+│   └── SOURCES.md
 ├── assets/
 └── .gitignore
 ```
 
-## 🗺️ Alcance inicial — Fase 0
+## 🚀 Mock API
 
-- Definición académica del proyecto.
-- Organización del repositorio.
-- Selección del enfoque BPM.
-- Definición de arquitectura documental.
-- Preparación de carpetas para BPMN, formularios, conectores y evidencias.
-- Roadmap por fases.
+```bash
+cd demo/mock-api
+python -m venv .venv
+# activar el entorno
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+```
+
+Swagger: `http://localhost:8000/docs`
+
+Pruebas:
+
+```bash
+pip install -r requirements-dev.txt
+pytest -q
+```
 
 ## 📊 Estado
 
-**Fase 0 — Inicialización del proyecto.**
+| Área | Estado |
+|---|---|
+| Fase 0 — Inicialización | ✅ Completa |
+| Investigación — 11 puntos | ✅ Completa |
+| Diseño BPMN y arquitectura | ✅ Preparado |
+| FastAPI / integración auxiliar | ✅ Implementada |
+| Pruebas de Mock API + CI | ✅ Implementadas |
+| Guion / presentación | ✅ Preparados |
+| Configuración final en Bonita Studio | 🟡 Requiere ejecución local |
+| Evidencias end-to-end de Bonita | 🟡 Pendientes del runtime |
 
-Consulta [`docs/ROADMAP.md`](docs/ROADMAP.md) para el plan de desarrollo.
+### Importante
+
+No se marca el proyecto como **Runtime Verified** hasta ejecutar el proceso dentro de Bonita Studio. El archivo BPMN del repositorio es un modelo estándar de referencia; la configuración propia de Bonita —BDM, contratos, actores, formularios y connector— debe aplicarse y validarse en Studio siguiendo [`docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md`](docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md).
+
+Consulta [`docs/ROADMAP.md`](docs/ROADMAP.md) para el detalle de fases y gates de cierre.
