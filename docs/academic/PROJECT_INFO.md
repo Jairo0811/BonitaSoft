@@ -2,7 +2,7 @@
 
 ## Proyecto
 
-**BonitaSoft — Implementación BPM con Bonita**
+**BonitaSoft — Investigación BPM/SOA y demostración de integración**
 
 ## Asignatura
 
@@ -18,7 +18,27 @@
 
 ## Evaluación
 
-**Primer parcial — BonitaSoft BPM**
+**Proyecto del primer parcial — 10 puntos**
+
+La Práctica 3 incluye a **BonitaSoft** entre las herramientas de investigación y solicita desarrollar:
+
+1. Introducción a SOA.
+2. Introducción a BPM.
+3. Historia y evolución.
+4. Características principales.
+5. Módulos de la aplicación.
+6. Componentes principales.
+7. Principales competidores.
+8. Hardware y/o appliance para una empresa con 500 usuarios.
+9. Elementos usuales de una solución SOA con la herramienta.
+10. Costos aproximados para una empresa con 500 usuarios.
+11. Cualquier otro aspecto importante considerado por el grupo.
+
+Los once puntos están desarrollados en `docs/research/`.
+
+## Complemento práctico
+
+El repositorio agrega una demo técnica no requerida explícitamente por la hoja de asignación para relacionar SOA, BPM y Bonita mediante una tarea humana y una integración REST.
 
 ## Equipo
 
@@ -31,4 +51,4 @@
 
 ## Separación de proyectos
 
-Este repositorio pertenece exclusivamente a ISO-815. El trabajo relacionado con otras asignaturas o con SOA-Forge debe mantenerse en repositorios independientes.
+Este repositorio pertenece exclusivamente a ISO-815. Se mantiene independiente de SOAForge y de trabajos correspondientes a otras asignaturas.
