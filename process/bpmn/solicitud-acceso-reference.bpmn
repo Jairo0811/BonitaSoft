@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             id="Definitions_SolicitudAcceso"
+             targetNamespace="https://github.com/Jairo0811/BonitaSoft">
+  <process id="Process_SolicitudAcceso" name="Solicitud de acceso a sistema" isExecutable="false">
+    <startEvent id="StartEvent_Solicitud" name="Solicitud recibida"/>
+    <serviceTask id="Task_Validar" name="Validar solicitud"/>
+    <userTask id="Task_Aprobar" name="Revisar y decidir solicitud"/>
+    <exclusiveGateway id="Gateway_Decision" name="¿Aprobada?"/>
+    <serviceTask id="Task_Provisionar" name="Provisionar acceso vía REST"/>
+    <userTask id="Task_Error" name="Resolver error de integración"/>
+    <endEvent id="EndEvent_Aprobada" name="Solicitud completada"/>
+    <endEvent id="EndEvent_Rechazada" name="Solicitud rechazada"/>
+
+    <sequenceFlow id="Flow_1" sourceRef="StartEvent_Solicitud" targetRef="Task_Validar"/>
+    <sequenceFlow id="Flow_2" sourceRef="Task_Validar" targetRef="Task_Aprobar"/>
+    <sequenceFlow id="Flow_3" sourceRef="Task_Aprobar" targetRef="Gateway_Decision"/>
+    <sequenceFlow id="Flow_Approved" name="Sí" sourceRef="Gateway_Decision" targetRef="Task_Provisionar"/>
+    <sequenceFlow id="Flow_Rejected" name="No" sourceRef="Gateway_Decision" targetRef="EndEvent_Rechazada"/>
+    <sequenceFlow id="Flow_Provisioned" sourceRef="Task_Provisionar" targetRef="EndEvent_Aprobada"/>
+    <sequenceFlow id="Flow_Error" name="Error técnico" sourceRef="Task_Provisionar" targetRef="Task_Error"/>
+    <sequenceFlow id="Flow_Retry" name="Reintentar" sourceRef="Task_Error" targetRef="Task_Provisionar"/>
+  </process>
+</definitions>
