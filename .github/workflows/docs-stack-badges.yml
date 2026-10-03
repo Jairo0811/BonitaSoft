@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   update-readme:
-    if: github.actor != 'github-actions[bot]'
+    if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,8 +19,9 @@ jobs:
           fetch-depth: 0
 
       - name: Add visual stack section
-        shell: python
+        shell: bash
         run: |
+          python - <<'PY'
           from pathlib import Path
 
           path = Path('README.md')
@@ -28,52 +29,54 @@ jobs:
           anchor = '## 🗂️ Estructura\n'
           section = '''## 🧱 Stack tecnológico
 
-> **Estado del stack:** la Mock API y sus pruebas están implementadas y automatizadas. La configuración final del proceso dentro de Bonita Studio todavía requiere ejecución local, por lo que no se presenta como Runtime Verified.
+          > **Estado del stack:** la Mock API y sus pruebas están implementadas y automatizadas. La configuración final del proceso dentro de Bonita Studio todavía requiere ejecución local, por lo que no se presenta como Runtime Verified.
 
-### 🔄 BPM y modelado
+          ### 🔄 BPM y modelado
 
-<p>
-  <img src="https://img.shields.io/badge/Bonita-BPM-7C3AED?style=flat-square" alt="Bonita BPM" />
-  <img src="https://img.shields.io/badge/BPMN-2.0-2563EB?style=flat-square" alt="BPMN 2.0" />
-</p>
+          <p>
+            <img src="https://img.shields.io/badge/Bonita-BPM-7C3AED?style=flat-square" alt="Bonita BPM" />
+            <img src="https://img.shields.io/badge/BPMN-2.0-2563EB?style=flat-square" alt="BPMN 2.0" />
+          </p>
 
-- Bonita / Bonita Studio como plataforma BPM del ejercicio;
-- BPMN 2.0 para el proceso de referencia;
-- BDM, contratos, formularios, actores y conectores documentados para implementación local.
+          - Bonita / Bonita Studio como plataforma BPM del ejercicio;
+          - BPMN 2.0 para el proceso de referencia;
+          - BDM, contratos, formularios, actores y conectores documentados para implementación local.
 
-### ⚙️ Integración y Mock API
+          ### ⚙️ Integración y Mock API
 
-<p>
-  <img src="https://skillicons.dev/icons?i=python,fastapi" alt="Python y FastAPI" />
-  <img src="https://img.shields.io/badge/OpenAPI-Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black" alt="OpenAPI / Swagger" />
-</p>
+          <p>
+            <img src="https://skillicons.dev/icons?i=python,fastapi" alt="Python y FastAPI" />
+            <img src="https://img.shields.io/badge/OpenAPI-Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black" alt="OpenAPI / Swagger" />
+          </p>
 
-- Python;
-- FastAPI;
-- Uvicorn;
-- endpoint REST `/provision` para la demostración de integración;
-- documentación automática OpenAPI / Swagger.
+          - Python;
+          - FastAPI;
+          - Uvicorn;
+          - endpoint REST `/provision` para la demostración de integración;
+          - documentación automática OpenAPI / Swagger.
 
-### 🧪 Calidad y DevOps
+          ### 🧪 Calidad y DevOps
 
-<p>
-  <img src="https://skillicons.dev/icons?i=docker,git,github,githubactions" alt="Docker, Git, GitHub y GitHub Actions" />
-  <img src="https://img.shields.io/badge/pytest-Testing-0A9EDC?style=flat-square&logo=pytest&logoColor=white" alt="pytest" />
-</p>
+          <p>
+            <img src="https://skillicons.dev/icons?i=docker,git,github,githubactions" alt="Docker, Git, GitHub y GitHub Actions" />
+            <img src="https://img.shields.io/badge/pytest-Testing-0A9EDC?style=flat-square&logo=pytest&logoColor=white" alt="pytest" />
+          </p>
 
-- pytest para la Mock API;
-- Docker / Dockerfile para el servicio auxiliar;
-- Git / GitHub;
-- GitHub Actions mediante `mock-api-ci.yml`.
+          - pytest para la Mock API;
+          - Docker / Dockerfile para el servicio auxiliar;
+          - Git / GitHub;
+          - GitHub Actions mediante `mock-api-ci.yml`.
 
----
+          ---
 
-'''
+          '''
+          section = section.replace('\n          ', '\n')
           if '## 🧱 Stack tecnológico' in text:
               raise SystemExit('Stack section already exists; refusing duplicate insertion.')
           if anchor not in text:
               raise SystemExit('Expected structure anchor was not found; refusing to rewrite README.')
           path.write_text(text.replace(anchor, section + anchor, 1), encoding='utf-8')
+          PY
 
       - name: Commit README update
         shell: bash
