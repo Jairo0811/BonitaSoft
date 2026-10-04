@@ -1,0 +1,45 @@
+{
+  "scenarios": [
+    {
+      "id": "E2E-01",
+      "name": "Ruta aprobada",
+      "input": {
+        "nombreSolicitante": "Jairo Matías",
+        "correo": "jairo@example.com",
+        "departamento": "Tecnología",
+        "sistema": "Sistema de Activos",
+        "nivelAcceso": "Estándar",
+        "justificacion": "Validación E2E del proceso ISO-815"
+      },
+      "decision": {"aprobada": true, "comentarioAprobador": "Aprobado para validación académica"},
+      "expectedStates": ["PENDIENTE","APROBADA","PROVISIONANDO","COMPLETADA"],
+      "expectedIntegration": {"status":"PROVISIONED","externalReferencePrefix":"ACC-"}
+    },
+    {
+      "id": "E2E-02",
+      "name": "Ruta rechazada",
+      "decision": {"aprobada": false, "comentarioAprobador": "Solicitud rechazada para prueba E2E"},
+      "expectedStates": ["PENDIENTE","RECHAZADA"],
+      "mustNotCall": "/provision"
+    },
+    {
+      "id": "E2E-03",
+      "name": "API caída",
+      "decision": {"aprobada": true, "comentarioAprobador": "Aprobada antes de provocar caída"},
+      "precondition": "FastAPI detenido antes de Provisionar acceso via REST",
+      "expected": ["connector FAILED","externalReference vacía","caso no COMPLETADA","ERROR_INTEGRACION documentado"]
+    },
+    {
+      "id": "E2E-04",
+      "name": "Reintento",
+      "precondition": "FastAPI disponible nuevamente",
+      "action": "Replay/retry del connector o recuperación equivalente",
+      "expected": ["PROVISIONED","externalReference ACC-...","COMPLETADA"]
+    },
+    {
+      "id": "E2E-05",
+      "name": "Trazabilidad",
+      "checks": ["Bonita case history","GET /audit","GET /audit/{request_id}","BDM externalReference"]
+    }
+  ]
+}
