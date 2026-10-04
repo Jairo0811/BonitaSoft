@@ -3,7 +3,7 @@
 <div align="center">
 
 <img src="https://img.shields.io/badge/UNAPEC-ISO--815-003B70?style=for-the-badge" alt="UNAPEC ISO-815" />
-<img src="https://img.shields.io/badge/Estado-CODE%20COMPLETE-16A34A?style=for-the-badge" alt="Code Complete" />
+<img src="https://img.shields.io/badge/Estado-FROZEN%20%2F%20CODE%20COMPLETE-16A34A?style=for-the-badge" alt="Frozen / Code Complete" />
 
 <br/><br/>
 
@@ -19,17 +19,9 @@
 
 **BonitaSoft** es el proyecto académico del primer parcial de **Integración de Aplicaciones con Tecnología Open Source (ISO-815)** de la Universidad APEC (UNAPEC).
 
-El repositorio combina:
+El repositorio combina investigación académica sobre SOA/BPM/Bonita, modelado BPMN, paquete de implementación para Bonita Studio, API FastAPI con persistencia SQLite, dashboard React/TypeScript responsive, integración REST, auditoría, pruebas automatizadas y CI.
 
-- investigación académica sobre SOA, BPM y Bonita;
-- modelado BPMN del proceso **Solicitud de acceso a sistema corporativo**;
-- paquete completo de implementación para Bonita Studio;
-- API FastAPI con persistencia SQLite;
-- dashboard React/TypeScript responsive;
-- aprovisionamiento REST y auditoría;
-- pruebas automatizadas y CI.
-
-> Estado actual: **CODE COMPLETE / Runtime Verification Pending**. El código y los artefactos están completos. Solo falta ejecutar el proceso dentro de la instalación local de Bonita Studio y guardar las evidencias reales del runtime.
+> **Estado final: FROZEN / CODE COMPLETE.** No quedan tareas de desarrollo planificadas para esta entrega. La ejecución física dentro de Bonita Studio **no fue certificada con evidencias reales**, por lo que no se utiliza la etiqueta `Runtime Verified`.
 
 ## Información académica
 
@@ -76,7 +68,7 @@ Fin rechazado       POST /provision
             Fin      Resolver / Reintentar
 ```
 
-El BPMN definitivo está en:
+BPMN definitivo portable:
 
 ```text
 process/bpmn/solicitud-acceso-final.bpmn
@@ -84,38 +76,21 @@ process/bpmn/solicitud-acceso-final.bpmn
 
 ## Paquete Bonita Studio
 
-El paquete de implementación se encuentra en `process/bonita/`.
-
 Punto de entrada:
 
 ```text
 process/bonita/RUNTIME_EXECUTION_PACKET.md
 ```
 
-Incluye:
+Incluye BDM `SolicitudAcceso`, variable de negocio, organización, actores, contratos, formularios, operaciones Groovy, gateway Aprobada/Rechazada, REST Connector, mapeo de `external_reference`, estados `COMPLETADA` y `ERROR_INTEGRACION`, reintento/replay y escenarios E2E.
 
-- BDM `SolicitudAcceso`;
-- business variable `solicitudAcceso`;
-- organización y actores;
-- contrato de inicio;
-- contrato de aprobación;
-- formularios y validaciones;
-- operaciones Groovy;
-- gateway Aprobada/Rechazada;
-- REST Connector `POST http://localhost:8000/provision`;
-- mapeo `external_reference`;
-- estado `COMPLETADA`;
-- manejo de `ERROR_INTEGRACION`;
-- reintento/replay;
-- escenarios E2E y convención de evidencias.
-
-Los manifiestos machine-readable viven en:
+Los manifiestos machine-readable están en:
 
 ```text
 process/bonita/runtime/
 ```
 
-El paquete se valida automáticamente con:
+Validación automática:
 
 ```bash
 python scripts/validate-bonita-pack.py
@@ -123,63 +98,22 @@ python scripts/validate-bonita-pack.py
 
 ## Stack
 
-### Frontend
-
-- React 19
-- TypeScript 5.9
-- Vite 7
-- Font Awesome
-- CSS responsive
-- branding BonitaSoft
-
-### Backend
-
-- Python
-- FastAPI
-- Uvicorn
-- SQLite
-- pytest
-
-### BPM / integración
-
-- Bonita / Bonita Studio
-- BPMN 2.0
-- BDM y contratos
-- REST `/provision`
-- auditoría `/audit`
-
-### DevOps
-
-- Git / GitHub
-- GitHub Actions
-- Docker
-- CI para API, dashboard y paquete Bonita
+- **Frontend:** React 19, TypeScript 5.9, Vite 7, Font Awesome, CSS responsive.
+- **Backend:** Python, FastAPI, Uvicorn, SQLite, pytest.
+- **BPM / integración:** Bonita / Bonita Studio, BPMN 2.0, BDM, contratos, REST `/provision`, auditoría `/audit`.
+- **DevOps:** Git, GitHub, GitHub Actions, Docker.
 
 ## Dashboard funcional
 
-La aplicación web incluye:
+Incluye Dashboard con KPI reales desde SQLite/FastAPI, gráfica de rendimiento por estado, Mis tareas, Procesos, Casos, Diseño BPMN, Integraciones, Auditoría, Usuarios, aprobación, rechazo y reintento.
 
-- Dashboard con KPI reales desde SQLite/FastAPI;
-- gráfica de rendimiento real por estado;
-- Mis tareas;
-- Procesos;
-- Casos e historial persistente;
-- Diseño BPMN;
-- Integraciones;
-- Auditoría;
-- Usuarios;
-- aprobación, rechazo y reintento;
-- navegación responsive para desktop, tablet y móvil.
-
-El logo final se carga desde:
+Logo final:
 
 ```text
 ui/dashboard-react/public/bonitasoft-logo.png
 ```
 
 ## Ejecución local
-
-### Windows — todo el entorno
 
 ```powershell
 .\scripts\start-local.ps1
@@ -193,27 +127,7 @@ FastAPI:   http://localhost:8000
 Swagger:   http://localhost:8000/docs
 ```
 
-### FastAPI manual
-
-```powershell
-cd demo\mock-api
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
-```
-
-### Dashboard manual
-
-```powershell
-cd ui\dashboard-react
-npm install
-npm run dev
-```
-
-## Helper para pruebas Bonita
-
-Desde la raíz:
+Helper de pruebas Bonita/FastAPI:
 
 ```powershell
 .\scripts\bonita-runtime-helper.ps1 -Action Health
@@ -223,9 +137,7 @@ Desde la raíz:
 .\scripts\bonita-runtime-helper.ps1 -Action AuditRequest -RequestId SA-XXXXXXXX
 ```
 
-Esto permite provocar y recuperar la ruta de error del connector durante las pruebas en Bonita Studio.
-
-## Estado
+## Estado final
 
 | Área | Estado |
 |---|:---:|
@@ -236,34 +148,19 @@ Esto permite provocar y recuperar la ruta de error del connector durante las pru
 | FastAPI + SQLite | ✅ |
 | Dashboard React | ✅ |
 | Responsive + branding | ✅ |
-| Tests API | ✅ |
-| CI Dashboard | ✅ |
-| CI Bonita Runtime Pack | ✅ |
+| Tests y CI | ✅ |
 | Escenarios E2E definidos | ✅ |
-| Ejecución física en Bonita Studio | 🟡 |
-| Evidencias runtime Bonita | 🟡 |
+| Repositorio | 🧊 FROZEN |
+| Runtime físico Bonita Studio | ⚪ No certificado |
 
-## Gate final — Runtime Verified
+## Congelamiento
 
-El repositorio **no se declara Runtime Verified** hasta ejecutar dentro de Bonita Studio y guardar evidencia de:
+El cierre formal está documentado en [`docs/FROZEN.md`](docs/FROZEN.md).
 
-1. BDM desplegado;
-2. organización y actores;
-3. formulario inicial;
-4. Human Task de aprobación;
-5. gateway aprobado/rechazado;
-6. REST Connector exitoso;
-7. `externalReference` persistida;
-8. API caída con error real;
-9. reintento/replay exitoso;
-10. auditoría y trazabilidad.
-
-Las evidencias se guardan en `assets/evidence/` y el seguimiento permanece en GitHub Issue #2.
-
-Para el detalle exacto del cierre, consulta [`docs/ROADMAP.md`](docs/ROADMAP.md).
+No se planifican más cambios para esta entrega. Cualquier desarrollo posterior deberá considerarse una reapertura explícita o una versión nueva.
 
 ---
 
 <div align="center">
-<strong>BonitaSoft · ISO-815 · UNAPEC · Septiembre - Diciembre 2026</strong>
+<strong>BonitaSoft · ISO-815 · UNAPEC · FROZEN / CODE COMPLETE · 2026-10-04</strong>
 </div>
