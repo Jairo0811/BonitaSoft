@@ -1,0 +1,24 @@
+{
+  "task": "Provisionar acceso via REST",
+  "connector": "REST POST",
+  "method": "POST",
+  "url": "http://localhost:8000/provision",
+  "headers": {"Content-Type":"application/json"},
+  "charset": "UTF-8",
+  "payloadScript": "process/bonita/runtime/buildProvisionPayload.groovy",
+  "successScript": "process/bonita/runtime/applyProvisionResponse.groovy",
+  "errorScript": "process/bonita/runtime/markIntegrationError.groovy",
+  "expected": {
+    "status": "PROVISIONED",
+    "requiredFields": ["request_id","external_reference","provisioned_at"]
+  },
+  "mapping": {
+    "external_reference": "solicitudAcceso.externalReference",
+    "status": "solicitudAcceso.estado=COMPLETADA",
+    "closedAt": "now"
+  },
+  "retry": {
+    "mode": "Bonita connector replay/retry or recovery task",
+    "idempotentBy": "request_id"
+  }
+}
