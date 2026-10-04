@@ -30,6 +30,10 @@ def test_provision_and_audit() -> None:
     assert audit.status_code == 200
     assert audit.json()["user_email"] == payload["user_email"]
 
+    audit_list = client.get("/audit")
+    assert audit_list.status_code == 200
+    assert any(item["request_id"] == payload["request_id"] for item in audit_list.json())
+
 
 def test_provision_is_idempotent_by_request_id() -> None:
     payload = {
