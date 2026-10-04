@@ -1,0 +1,18 @@
+{
+  "organization": "BonitaSoft ISO-815",
+  "groups": [
+    {"path":"/Empresa","displayName":"Empresa"},
+    {"path":"/Empresa/Solicitantes","displayName":"Solicitantes"},
+    {"path":"/Empresa/Aprobadores","displayName":"Aprobadores"}
+  ],
+  "roles": ["member"],
+  "users": [
+    {"username":"solicitante.demo","group":"/Empresa/Solicitantes","role":"member","purpose":"iniciar solicitudes"},
+    {"username":"aprobador.demo","group":"/Empresa/Aprobadores","role":"member","purpose":"aprobar o rechazar solicitudes"}
+  ],
+  "actors": [
+    {"name":"Solicitante","mapping":{"group":"/Empresa/Solicitantes","role":"member"}},
+    {"name":"Aprobador","mapping":{"group":"/Empresa/Aprobadores","role":"member"}}
+  ],
+  "note": "Las contraseñas se configuran localmente en Bonita Studio y no se versionan."
+}
