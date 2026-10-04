@@ -5,6 +5,7 @@ import '../../theme/tokens.css';
 import '../../theme/bonitasoft-components.css';
 import './styles.css';
 import './functional.css';
+import './sections.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
