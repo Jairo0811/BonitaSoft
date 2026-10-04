@@ -2,11 +2,13 @@
 
 ## Estado general
 
-**Estado del repositorio: CODE COMPLETE ✅**
+**Estado final: FROZEN / CODE COMPLETE 🧊✅**
 
-La investigación, arquitectura, BPMN definitivo, BDM, contratos, organización, actores, formularios especificados, expresiones Groovy, REST connector, recuperación de errores, FastAPI, SQLite, dashboard React, pruebas, CI, demo y material académico están consolidados en `main`.
+El repositorio queda cerrado para esta entrega académica. La investigación, arquitectura, BPMN definitivo, BDM, contratos, organización, actores, formularios especificados, expresiones Groovy, REST connector, recuperación de errores, FastAPI, SQLite, dashboard React, pruebas, CI, demo y material académico están consolidados en `main`.
 
-El único gate restante no es de código: **ejecutar el proceso en la versión concreta de Bonita Studio instalada por el equipo y capturar evidencia real del runtime**.
+No quedan tareas de desarrollo planificadas dentro del alcance congelado.
+
+> La ejecución física dentro de Bonita Studio no fue certificada con evidencias reales. Por ese motivo el proyecto **no** se etiqueta como `Runtime Verified`. Esa validación queda fuera del alcance del congelamiento actual y solo requeriría una reapertura explícita del proyecto.
 
 ---
 
@@ -19,7 +21,7 @@ El único gate restante no es de código: **ejecutar el proceso en la versión c
 
 ## Fase 1 — Investigación académica ✅
 
-- [x] Los 11 puntos de la Práctica 3 están desarrollados en `docs/research/`.
+- [x] Los 11 puntos de la Práctica 3 desarrollados en `docs/research/`.
 - [x] SOA y BPM.
 - [x] Historia, características, módulos y componentes.
 - [x] Competidores.
@@ -40,11 +42,10 @@ El único gate restante no es de código: **ejecutar el proceso en la versión c
 - [x] Tarea de recuperación y reintento.
 - [x] BPMN 2.0 definitivo: `process/bpmn/solicitud-acceso-final.bpmn`.
 - [x] BPMN portable validado por CI.
-- [ ] Importar/recrear y validar visualmente en Bonita Studio.
 
-> El BPMN del repositorio es estándar BPMN 2.0. La configuración ejecutable específica de Bonita depende de la versión de Studio usada localmente.
+**Runtime local:** no certificado dentro del alcance congelado.
 
-## Fase 3 — Implementación Bonita preparada ✅ / Runtime local pendiente
+## Fase 3 — Paquete Bonita Studio ✅
 
 - [x] BDM `SolicitudAcceso` definido.
 - [x] Business variable `solicitudAcceso` definida.
@@ -59,9 +60,10 @@ El único gate restante no es de código: **ejecutar el proceso en la versión c
 - [x] Runbook final `process/bonita/RUNTIME_EXECUTION_PACKET.md`.
 - [x] Validador `scripts/validate-bonita-pack.py`.
 - [x] CI `Bonita Runtime Pack CI` en verde.
-- [ ] Aplicar/desplegar esta configuración en Bonita Studio local.
 
-## Fase 4 — Integración REST ✅ / Ejecución desde Bonita pendiente
+**Despliegue en Studio:** no certificado; no se representa como ejecutado.
+
+## Fase 4 — Integración REST ✅
 
 - [x] FastAPI local.
 - [x] `POST /provision`.
@@ -73,9 +75,10 @@ El único gate restante no es de código: **ejecutar el proceso en la versión c
 - [x] Mapeo `external_reference` → `solicitudAcceso.externalReference`.
 - [x] Estado final `COMPLETADA` especificado.
 - [x] Configuración del connector versionada en `process/bonita/runtime/rest-connector.json`.
-- [ ] Ejecutar el REST Connector desde Bonita Studio.
 
-## Fase 5 — Error, reintento, pruebas y auditoría ✅ / E2E Bonita pendiente
+**Ejecución desde Bonita Studio:** no certificada.
+
+## Fase 5 — Error, reintento, pruebas y auditoría ✅
 
 - [x] Ruta aprobada definida.
 - [x] Ruta rechazada definida.
@@ -87,10 +90,10 @@ El único gate restante no es de código: **ejecutar el proceso en la versión c
 - [x] Mock API con tests automatizados y CI.
 - [x] Dashboard con datos reales SQLite/FastAPI.
 - [x] Convención de evidencias definida.
-- [ ] Ejecutar E2E-01 a E2E-05 dentro de Bonita Studio.
-- [ ] Capturar evidencias reales del runtime.
 
-## Fase 6 — Demo y entrega ✅ / evidencia Bonita pendiente
+**E2E dentro de Bonita Studio y capturas reales:** no certificados.
+
+## Fase 6 — Demo y entrega ✅
 
 - [x] Guion de demo.
 - [x] Datos de demostración.
@@ -100,8 +103,16 @@ El único gate restante no es de código: **ejecutar el proceso en la versión c
 - [x] Helper de runtime Bonita/FastAPI.
 - [x] Branding final.
 - [x] Frontend responsive + Font Awesome.
-- [ ] Capturas finales de Bonita Studio.
-- [ ] Demo final del runtime Bonita.
+- [x] Paquete Bonita reproducible y documentado.
+
+## Fase 7 — Cierre y congelamiento ✅
+
+- [x] Estado final documentado.
+- [x] README marcado `FROZEN / CODE COMPLETE`.
+- [x] Documento `docs/FROZEN.md` creado.
+- [x] Alcance del runtime no certificado dejado explícito.
+- [x] Desarrollo futuro condicionado a reapertura o nueva versión.
+- [x] Proyecto congelado el **2026-10-04**.
 
 ---
 
@@ -113,25 +124,21 @@ El único gate restante no es de código: **ejecutar el proceso en la versión c
 | React / TypeScript / Vite | ✅ 100% |
 | FastAPI / SQLite | ✅ 100% |
 | BPMN y paquete Bonita | ✅ 100% repo-side |
-| CI del paquete Bonita | ✅ |
-| Pruebas API / frontend | ✅ |
-| Runtime Bonita Studio | 🟡 Requiere ejecución local |
-| Evidencias Bonita | 🟡 Pendientes |
+| CI API / Frontend / paquete Bonita | ✅ |
+| Pruebas automatizadas | ✅ |
+| Documentación y demo | ✅ |
+| Repositorio | 🧊 FROZEN |
+| Runtime físico Bonita Studio | ⚪ No certificado |
+| Evidencias físicas Bonita | ⚪ No certificadas |
 
-## Criterio para `Runtime Verified`
+## Decisión final
 
-Solo cambiar el proyecto a **COMPLETO 100% / Runtime Verified** cuando existan evidencias reales de Bonita Studio para:
+BonitaSoft ISO-815 se cierra como:
 
-1. BDM desplegado;
-2. organización y actores desplegados;
-3. formulario de inicio;
-4. Human Task ejecutada por el aprobador;
-5. ruta aprobada;
-6. ruta rechazada;
-7. REST `/provision` exitoso;
-8. `externalReference` persistida;
-9. API caída con fallo real del connector;
-10. reintento/replay exitoso;
-11. auditoría y trazabilidad del caso.
+```text
+FROZEN / CODE COMPLETE
+Runtime verification: NOT CERTIFIED
+Frozen: 2026-10-04
+```
 
-Hasta ese momento, el estado correcto es **CODE COMPLETE / Runtime Verification Pending**. No se sustituye una ejecución real de Bonita con una afirmación documental.
+No se sustituye una ejecución real de Bonita Studio con una afirmación documental. Si en el futuro se desea obtener la etiqueta `Runtime Verified`, deberá reabrirse explícitamente el proyecto, ejecutar el runbook de `process/bonita/` y adjuntar las evidencias reales.
