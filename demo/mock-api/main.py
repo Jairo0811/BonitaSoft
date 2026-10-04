@@ -8,7 +8,7 @@ from pydantic import BaseModel, EmailStr, Field
 
 app = FastAPI(
     title="BonitaSoft ISO-815 Mock Provisioning API",
-    version="2.0.0",
+    version="2.1.0",
     description="Servicio demostrativo para la integración REST y flujo local de solicitudes del proyecto BonitaSoft.",
 )
 
@@ -210,6 +210,11 @@ def health() -> dict[str, str]:
 @app.post("/provision", response_model=ProvisionResponse, status_code=201)
 def provision(payload: ProvisionRequest) -> ProvisionResponse:
     return _provision(payload)
+
+
+@app.get("/audit", response_model=list[AuditRecord])
+def list_audit() -> list[AuditRecord]:
+    return sorted(_records.values(), key=lambda item: item.provisioned_at, reverse=True)
 
 
 @app.get("/audit/{request_id}", response_model=AuditRecord)
