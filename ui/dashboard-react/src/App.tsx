@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import { api } from './api';
-import type { AccessRequest, AccessRequestCreate, AuditRecord, DashboardStats } from './api';
+import type { AccessRequest, AccessRequestCreate, AuditRecord, DashboardStats, UserSummary } from './api';
 import {
   AuditView,
   BpmnView,
@@ -47,9 +47,9 @@ const EMPTY_STATS: DashboardStats = {
 
 const pageMeta: Record<NavName, { eyebrow: string; title: string; description: string }> = {
   Dashboard: {
-    eyebrow: 'Panel de control · API local conectada',
+    eyebrow: 'Panel de control · Persistencia SQLite',
     title: 'Gestión BPM de solicitudes de acceso',
-    description: 'Solicitudes, aprobación humana, aprovisionamiento REST y trazabilidad local.',
+    description: 'Solicitudes, aprobación humana, aprovisionamiento REST y trazabilidad persistente.',
   },
   'Mis tareas': {
     eyebrow: 'Bandeja de trabajo · Tareas humanas',
@@ -64,7 +64,7 @@ const pageMeta: Record<NavName, { eyebrow: string; title: string; description: s
   Casos: {
     eyebrow: 'Instancias · Seguimiento operativo',
     title: 'Casos e instancias',
-    description: 'Filtra y revisa cada solicitud que atraviesa el flujo BPM.',
+    description: 'Filtra, abre y revisa la trazabilidad completa de cada solicitud.',
   },
   'Diseño BPMN': {
     eyebrow: 'Modelado · BPMN 2.0',
@@ -79,12 +79,12 @@ const pageMeta: Record<NavName, { eyebrow: string; title: string; description: s
   Auditoría: {
     eyebrow: 'Trazabilidad · Evidencia técnica',
     title: 'Auditoría',
-    description: 'Registros reales de aprovisionamiento generados durante la sesión local.',
+    description: 'Registros persistentes de aprovisionamiento almacenados en SQLite.',
   },
   Usuarios: {
-    eyebrow: 'Participantes · Solicitantes',
+    eyebrow: 'Participantes · Persistencia local',
     title: 'Usuarios',
-    description: 'Resumen de usuarios y sistemas a partir de las solicitudes registradas.',
+    description: 'Usuarios persistentes, sistemas solicitados y actividad histórica.',
   },
 };
 
@@ -95,6 +95,7 @@ export default function App() {
   const [requests, setRequests] = useState<AccessRequest[]>([]);
   const [stats, setStats] = useState<DashboardStats>(EMPTY_STATS);
   const [auditRecords, setAuditRecords] = useState<AuditRecord[]>([]);
+  const [users, setUsers] = useState<UserSummary[]>([]);
   const [apiOnline, setApiOnline] = useState(false);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState('');
@@ -112,14 +113,16 @@ export default function App() {
     try {
       await api.health();
       setApiOnline(true);
-      const [requestRows, dashboardStats, auditRows] = await Promise.all([
+      const [requestRows, dashboardStats, auditRows, userRows] = await Promise.all([
         api.listRequests(),
         api.stats(),
-        api.listAudit().catch(() => [] as AuditRecord[]),
+        api.listAudit(),
+        api.listUsers(),
       ]);
       setRequests(requestRows);
       setStats(dashboardStats);
       setAuditRecords(auditRows);
+      setUsers(userRows);
     } catch (error) {
       setApiOnline(false);
       showNotice(`No se pudo conectar con la API local: ${error instanceof Error ? error.message : 'error desconocido'}`);
@@ -151,7 +154,7 @@ export default function App() {
       const created = await api.createRequest(form);
       setModalOpen(false);
       setForm(EMPTY_FORM);
-      showNotice(`Solicitud ${created.id} creada y enviada a aprobación.`);
+      showNotice(`Solicitud ${created.id} creada y guardada en SQLite.`);
       await loadDashboard();
       setActiveNav('Mis tareas');
     } catch (error) {
@@ -186,6 +189,7 @@ export default function App() {
     requests,
     stats,
     auditRecords,
+    users,
     query,
     apiOnline,
     busyId,
