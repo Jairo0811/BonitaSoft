@@ -2,7 +2,7 @@
 
 ## Estado general
 
-La investigación, arquitectura, modelo de referencia, contratos, integración auxiliar, pruebas y material de exposición están **consolidados en el repositorio**.
+La investigación, arquitectura, modelo de referencia, contratos, integración auxiliar, pruebas, dashboard operativo, persistencia SQLite, paquete de runtime y material de exposición están **consolidados en el repositorio**.
 
 Queda un único gate que no puede validarse solo desde Git/GitHub: ejecutar el proceso dentro de la versión concreta de **Bonita Studio** utilizada por el equipo y capturar las evidencias de runtime.
 
@@ -43,7 +43,7 @@ Queda un único gate que no puede validarse solo desde Git/GitHub: ejecutar el p
 
 > El `.bpmn` del repositorio es un artefacto estándar de referencia, no se presenta como el archivo ejecutable final de Bonita.
 
-## Fase 3 — Implementación Bonita — Runbook completo 🟡
+## Fase 3 — Implementación Bonita — paquete completo 🟡
 
 - [x] Definir organización y actores.
 - [x] Definir Business Data Model.
@@ -52,9 +52,18 @@ Queda un único gate que no puede validarse solo desde Git/GitHub: ejecutar el p
 - [x] Definir tarea humana.
 - [x] Definir reglas del gateway.
 - [x] Crear runbook paso a paso.
+- [x] Crear paquete detallado `process/bonita/`.
+- [x] Documentar expresiones Groovy de apoyo.
+- [x] Documentar estados funcionales del caso.
+- [x] Crear checklist de runtime.
+- [x] Crear convención de evidencias.
 - [ ] Aplicar/validar configuración en Bonita Studio.
 
-Documento: `docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md`.
+Documentos:
+
+- `docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md`
+- `process/bonita/README.md`
+- `process/bonita/RUNTIME_CHECKLIST.md`
 
 ## Fase 4 — Integración ✅ / Bonita connector pending
 
@@ -63,9 +72,11 @@ Documento: `docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md`.
 - [x] Implementar `GET /audit/{request_id}`.
 - [x] Health endpoint.
 - [x] Idempotencia por `request_id`.
+- [x] Persistencia SQLite.
 - [x] Dockerfile.
 - [x] Documentar payload y respuesta.
 - [x] Documentar manejo de errores.
+- [x] Documentar configuración exacta del connector en `process/bonita/REST_CONNECTOR.md`.
 - [ ] Configurar y ejecutar el REST Connector dentro de Bonita Studio.
 
 ## Fase 5 — Pruebas y auditoría ✅ / E2E Bonita pending
@@ -76,7 +87,9 @@ Documento: `docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md`.
 - [x] Definir ruta aprobada.
 - [x] Definir ruta rechazada.
 - [x] Definir prueba de API caída.
+- [x] Definir recuperación/reintento.
 - [x] Definir evidencia de auditoría.
+- [x] Dashboard React alimentado por datos reales SQLite/FastAPI.
 - [ ] Ejecutar casos end-to-end desde Bonita.
 - [ ] Capturar evidencias reales del runtime.
 
@@ -88,6 +101,7 @@ Documento: `docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md`.
 - [x] Fuentes para diapositivas.
 - [x] Documentación técnica consolidada.
 - [x] Estructura para evidencias.
+- [x] Convención de nombres en `assets/evidence/README.md`.
 - [ ] Capturas finales de Bonita Studio.
 - [ ] Demo final en el entorno del equipo.
 
@@ -101,7 +115,7 @@ Documento: `docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md`.
 
 ### Complemento práctico
 
-**Preparado para ejecución.** El repositorio contiene diseño, contratos, API, Docker, pruebas, CI y runbook.
+**Preparado para ejecución.** El repositorio contiene diseño, contratos, API, persistencia, dashboard, pruebas, CI, runbook y paquete de runtime.
 
 ### Runtime Verified
 
@@ -111,6 +125,7 @@ Solo marcar como **COMPLETO 100% / Runtime Verified** cuando el equipo ejecute e
 2. ruta rechazada;
 3. REST connector exitoso;
 4. error de integración;
-5. trazabilidad del caso.
+5. recuperación/reintento;
+6. trazabilidad del caso.
 
 No se debe sustituir esta verificación con una afirmación documental.
