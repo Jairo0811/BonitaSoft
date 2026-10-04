@@ -1,0 +1,11 @@
+{
+  "task": "Revisar y decidir solicitud",
+  "actor": "Aprobador",
+  "name": "decisionInput",
+  "inputs": [
+    {"name":"aprobada","type":"BOOLEAN","required":true},
+    {"name":"comentarioAprobador","type":"TEXT","requiredWhen":"aprobada == false"}
+  ],
+  "readonlyFields": ["requestId","nombreSolicitante","correo","departamento","sistema","nivelAcceso","justificacion"],
+  "operationScript": "process/bonita/runtime/applyDecision.groovy"
+}
