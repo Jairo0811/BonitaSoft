@@ -1,27 +1,36 @@
 # Runbook de implementación en Bonita Studio
 
-Este documento convierte los artefactos del repositorio en una lista de configuración dentro de Bonita Studio.
+Estado del repositorio: **CODE COMPLETE ✅**
 
-## Paquete detallado de runtime
+Este documento resume cómo aplicar dentro de Bonita Studio los artefactos finales de BonitaSoft. El detalle de una sola pasada está en `process/bonita/RUNTIME_EXECUTION_PACKET.md`.
 
-La configuración ejecutable está desglosada en `process/bonita/`:
+## Artefactos definitivos
 
-- `BDM.md` — modelo `SolicitudAcceso`.
-- `CONTRACTS_AND_OPERATIONS.md` — contratos, operaciones y estados.
-- `ACTORS_AND_ORGANIZATION.md` — organización y actores.
-- `GROOVY_EXPRESSIONS.md` — expresiones de apoyo.
-- `REST_CONNECTOR.md` — configuración de FastAPI.
-- `RUNTIME_CHECKLIST.md` — validación end-to-end.
+- BPMN final: `process/bpmn/solicitud-acceso-final.bpmn`.
+- BDM: `process/bonita/BDM.md`.
+- Contratos/operaciones: `process/bonita/CONTRACTS_AND_OPERATIONS.md`.
+- Organización/actores: `process/bonita/ACTORS_AND_ORGANIZATION.md`.
+- Groovy: `process/bonita/runtime/*.groovy`.
+- Connector: `process/bonita/runtime/rest-connector.json`.
+- Manifiesto global: `process/bonita/runtime/implementation-manifest.json`.
+- E2E: `process/bonita/runtime/e2e-scenarios.json`.
+- Evidencias: `assets/evidence/README.md`.
 
-Las capturas deben guardarse siguiendo `assets/evidence/README.md`.
+## 1. Business Data Model
 
-## 1. Crear/abrir proyecto
+Package:
 
-Crear un proyecto Bonita compatible con la versión instalada y mantenerlo bajo control de versiones según las capacidades de esa versión.
+```text
+com.jmsoftware.bonitasoft.model
+```
 
-## 2. Business Data Model
+Business Object:
 
-Crear entidad `SolicitudAcceso` con:
+```text
+SolicitudAcceso
+```
+
+Atributos:
 
 | Atributo | Tipo sugerido |
 |---|---|
@@ -36,12 +45,16 @@ Crear entidad `SolicitudAcceso` con:
 | aprobada | Boolean |
 | comentarioAprobador | String |
 | externalReference | String |
-| createdAt | Date/DateTime según versión |
-| closedAt | Date/DateTime según versión |
+| createdAt | Date/DateTime compatible con la versión instalada |
+| closedAt | Date/DateTime compatible con la versión instalada |
 
-Desplegar BDM en el runtime de desarrollo.
+Business variable del proceso:
 
-Estados funcionales del caso:
+```text
+solicitudAcceso : com.jmsoftware.bonitasoft.model.SolicitudAcceso
+```
+
+Estados:
 
 ```text
 PENDIENTE
@@ -53,9 +66,7 @@ COMPLETADA
 ERROR_INTEGRACION
 ```
 
-## 3. Organización
-
-Crear grupos/roles de demo:
+## 2. Organización y actores
 
 ```text
 /Empresa
@@ -63,155 +74,219 @@ Crear grupos/roles de demo:
   /Aprobadores
 ```
 
-Usuarios de demo:
+Usuarios:
 
-- `solicitante.demo`
-- `aprobador.demo`
+```text
+solicitante.demo
+aprobador.demo
+```
 
-Mapear actores `Solicitante` y `Aprobador`.
+Actores:
 
-## 4. Diagrama
+```text
+Solicitante -> /Empresa/Solicitantes
+Aprobador   -> /Empresa/Aprobadores
+```
 
-Usar `process/bpmn/PROCESS_SPEC.md` y el `.bpmn` de referencia para reproducir:
+Las contraseñas se crean localmente y no se versionan.
+
+## 3. BPMN definitivo
+
+Usar `process/bpmn/solicitud-acceso-final.bpmn` como modelo definitivo portable:
 
 ```text
 Inicio
  → Validar solicitud
- → Revisar y decidir (Human Task)
- → Gateway aprobada?
-    ├─ No → Rechazada → Fin
-    └─ Sí → Provisionar acceso (REST)
+ → Revisar y decidir solicitud
+ → ¿Aprobada?
+    ├─ No → Registrar rechazo → Fin
+    └─ Sí → Preparar aprovisionamiento
                ↓
-          ¿Integración OK?
-          ├─ Sí → Completada → Fin
-          └─ No → Resolver error → Reintentar
+            Provisionar acceso via REST
+               ↓
+          Boundary Error ─→ Resolver error ─→ Reintentar
+               ↓
+            Completar solicitud
+               ↓
+              Fin
 ```
 
-## 5. Contrato de inicio
+El Boundary Error queda asociado a `Provisionar acceso via REST`.
 
-Crear estructura `requestInput` con los campos documentados en `process/forms/FORM_SPEC.md`.
+## 4. Contrato de inicio
 
-En las operaciones de inicio:
+```text
+requestInput
+  nombreSolicitante: TEXT
+  correo: TEXT
+  departamento: TEXT
+  sistema: TEXT
+  nivelAcceso: TEXT
+  justificacion: TEXT
+```
 
-- generar `requestId`;
-- crear objeto `SolicitudAcceso`;
-- establecer `estado = "PENDIENTE"`;
-- establecer fecha de creación.
+Manifiesto: `process/bonita/runtime/start-contract.json`.
 
-## 6. Formulario inicial
+Inicialización: `process/bonita/runtime/initializeSolicitudAcceso.groovy`.
 
-Generar formulario desde el contrato y agregar validaciones:
+## 5. Formulario inicial
 
-- requeridos;
+Generar desde el contrato y validar:
+
+- campos obligatorios;
 - formato email;
-- justificación mínima.
+- sistema no vacío;
+- nivel no vacío;
+- justificación no vacía.
 
-## 7. Tarea humana
+## 6. Human Task
 
-En `Revisar y decidir solicitud`:
-
-- actor: `Aprobador`;
-- contrato: `aprobada`, `comentarioAprobador`;
-- formulario con datos de solicitud en lectura;
-- operación que actualiza el BDM.
-
-## 8. Gateway
-
-Rutas:
+Tarea:
 
 ```text
-aprobada == true  → Provisionar acceso
-aprobada == false → Rechazada
+Revisar y decidir solicitud
 ```
 
-En rechazo actualizar:
+Actor:
 
 ```text
-estado = "RECHAZADA"
-closedAt = now
+Aprobador
 ```
 
-## 9. REST Connector
-
-Antes de ejecutar, iniciar `demo/mock-api`.
-
-Configurar POST:
+Contrato:
 
 ```text
-http://localhost:8000/provision
+decisionInput
+  aprobada: BOOLEAN
+  comentarioAprobador: TEXT
 ```
 
-Header:
+Regla: el comentario es obligatorio cuando `aprobada == false`.
+
+Manifiesto: `process/bonita/runtime/approval-contract.json`.
+Operación: `process/bonita/runtime/applyDecision.groovy`.
+
+## 7. Gateway
+
+```groovy
+solicitudAcceso.aprobada == true
+```
+
+para la ruta aprobada. La otra salida funciona como rechazo/default.
+
+## 8. REST Connector
+
+URL:
+
+```text
+POST http://localhost:8000/provision
+```
+
+Headers:
 
 ```text
 Content-Type: application/json
 Accept: application/json
 ```
 
-Payload conceptual:
+Payload generado por:
+
+```text
+process/bonita/runtime/buildProvisionPayload.groovy
+```
+
+Respuesta esperada:
 
 ```json
 {
-  "request_id": "<requestId>",
-  "user_email": "<correo>",
-  "system": "<sistema>",
-  "access_level": "<nivelAcceso>"
+  "request_id": "SA-XXXXXXXX",
+  "status": "PROVISIONED",
+  "external_reference": "ACC-XXXXXXXXXXXX",
+  "provisioned_at": "..."
 }
 ```
 
-Mapear respuesta:
+Mapeo posterior al éxito:
 
-- `external_reference` → `externalReference`;
-- `status == PROVISIONED` → `estado = COMPLETADA`;
-- `closedAt = now`.
+```text
+external_reference -> solicitudAcceso.externalReference
+estado             -> COMPLETADA
+closedAt           -> now
+```
 
-No establecer `COMPLETADA` antes de validar la respuesta REST.
+Script: `process/bonita/runtime/applyProvisionResponse.groovy`.
 
-## 10. Error handling
+No establecer `COMPLETADA` antes de comprobar `status == PROVISIONED`.
 
-Probar con la API detenida o con una URL temporalmente inválida. El caso no debe terminar como completado.
+## 9. Error y reintento
 
-Estado funcional esperado:
+Con FastAPI detenida, el connector debe fallar y el caso no puede quedar completado.
+
+Estado funcional documentado:
 
 ```text
 ERROR_INTEGRACION
 ```
 
-Mantener el fallo visible o dirigir a la tarea `Resolver error de integración`, desde donde pueda reintentarse el connector.
+Script de apoyo: `process/bonita/runtime/markIntegrationError.groovy`.
 
-## 11. Validación
+Tras restablecer FastAPI, ejecutar replay/retry del connector o completar la tarea de recuperación que retorna a la Service Task.
 
-Ejecutar en este orden:
+La API es idempotente por `request_id`.
 
-1. `TC-01` solicitud válida.
-2. `TC-03` aprobación.
-3. `TC-07` integración exitosa.
-4. `TC-04` rechazo.
-5. `TC-08` API caída.
-6. recuperación/reintento.
-7. `TC-10` auditoría.
+## 10. Pruebas E2E
 
-Ver `demo/TEST_CASES.md` y `process/bonita/RUNTIME_CHECKLIST.md`.
+Ejecutar `E2E-01` a `E2E-05` según:
 
-## 12. Evidencias
+```text
+process/bonita/runtime/e2e-scenarios.json
+```
 
-Guardar capturas en `assets/evidence/` siguiendo la convención definida en `assets/evidence/README.md`.
+Cobertura:
 
-Como mínimo demostrar:
+1. aprobada + REST exitoso;
+2. rechazada sin REST;
+3. API caída;
+4. reintento;
+5. auditoría/trazabilidad.
 
-- diagrama en Studio;
+## 11. Herramientas locales
+
+```powershell
+.\scripts\bonita-runtime-helper.ps1 -Action Health
+.\scripts\bonita-runtime-helper.ps1 -Action StartApi
+.\scripts\bonita-runtime-helper.ps1 -Action StopApi
+.\scripts\bonita-runtime-helper.ps1 -Action Audit
+.\scripts\bonita-runtime-helper.ps1 -Action AuditRequest -RequestId SA-XXXXXXXX
+```
+
+## 12. Validación del paquete
+
+```bash
+python scripts/validate-bonita-pack.py
+```
+
+El mismo validador se ejecuta en `Bonita Runtime Pack CI`.
+
+## 13. Evidencias
+
+Guardar las capturas reales siguiendo `assets/evidence/README.md`.
+
+Como mínimo:
+
+- BPMN en Studio;
 - BDM;
-- organización;
-- formulario;
-- tarea humana;
-- ruta aprobada;
-- ruta rechazada;
-- REST connector;
-- respuesta de la API;
-- error controlado;
+- organización/actores;
+- formulario inicial;
+- Human Task;
+- gateway;
+- REST Connector;
+- caso aprobado;
+- caso rechazado;
+- API caída;
 - reintento;
-- historial del caso.
+- caso finalizado e historial.
 
 ## Criterio de cierre técnico
 
-Solo marcar como **Runtime Verified** cuando el proceso haya sido ejecutado en Bonita Studio y se hayan validado las rutas aprobada, rechazada y de error/recuperación. El repositorio por sí solo no demuestra esa ejecución.
+El repositorio está **CODE COMPLETE**. Solo marcar **Runtime Verified** después de ejecutar todas las rutas dentro de Bonita Studio y guardar evidencia real. La preparación documental, los manifiestos y el CI no sustituyen esa ejecución.
