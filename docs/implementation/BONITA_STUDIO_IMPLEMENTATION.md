@@ -2,6 +2,19 @@
 
 Este documento convierte los artefactos del repositorio en una lista de configuración dentro de Bonita Studio.
 
+## Paquete detallado de runtime
+
+La configuración ejecutable está desglosada en `process/bonita/`:
+
+- `BDM.md` — modelo `SolicitudAcceso`.
+- `CONTRACTS_AND_OPERATIONS.md` — contratos, operaciones y estados.
+- `ACTORS_AND_ORGANIZATION.md` — organización y actores.
+- `GROOVY_EXPRESSIONS.md` — expresiones de apoyo.
+- `REST_CONNECTOR.md` — configuración de FastAPI.
+- `RUNTIME_CHECKLIST.md` — validación end-to-end.
+
+Las capturas deben guardarse siguiendo `assets/evidence/README.md`.
+
 ## 1. Crear/abrir proyecto
 
 Crear un proyecto Bonita compatible con la versión instalada y mantenerlo bajo control de versiones según las capacidades de esa versión.
@@ -27,6 +40,18 @@ Crear entidad `SolicitudAcceso` con:
 | closedAt | Date/DateTime según versión |
 
 Desplegar BDM en el runtime de desarrollo.
+
+Estados funcionales del caso:
+
+```text
+PENDIENTE
+EN_REVISION
+APROBADA
+RECHAZADA
+PROVISIONANDO
+COMPLETADA
+ERROR_INTEGRACION
+```
 
 ## 3. Organización
 
@@ -55,10 +80,12 @@ Inicio
  → Revisar y decidir (Human Task)
  → Gateway aprobada?
     ├─ No → Rechazada → Fin
-    └─ Sí → Provisionar acceso (REST) → Completada → Fin
+    └─ Sí → Provisionar acceso (REST)
+               ↓
+          ¿Integración OK?
+          ├─ Sí → Completada → Fin
+          └─ No → Resolver error → Reintentar
 ```
-
-Agregar una estrategia de fallo/reintento para el connector.
 
 ## 5. Contrato de inicio
 
@@ -118,6 +145,7 @@ Header:
 
 ```text
 Content-Type: application/json
+Accept: application/json
 ```
 
 Payload conceptual:
@@ -137,9 +165,19 @@ Mapear respuesta:
 - `status == PROVISIONED` → `estado = COMPLETADA`;
 - `closedAt = now`.
 
+No establecer `COMPLETADA` antes de validar la respuesta REST.
+
 ## 10. Error handling
 
-Probar con la API detenida. El caso no debe terminar como completado. Mantener el fallo visible o dirigir a la tarea `Resolver error de integración`, según el diseño elegido en Studio.
+Probar con la API detenida o con una URL temporalmente inválida. El caso no debe terminar como completado.
+
+Estado funcional esperado:
+
+```text
+ERROR_INTEGRACION
+```
+
+Mantener el fallo visible o dirigir a la tarea `Resolver error de integración`, desde donde pueda reintentarse el connector.
 
 ## 11. Validación
 
@@ -150,13 +188,16 @@ Ejecutar en este orden:
 3. `TC-07` integración exitosa.
 4. `TC-04` rechazo.
 5. `TC-08` API caída.
-6. `TC-10` auditoría.
+6. recuperación/reintento.
+7. `TC-10` auditoría.
 
-Ver `demo/TEST_CASES.md`.
+Ver `demo/TEST_CASES.md` y `process/bonita/RUNTIME_CHECKLIST.md`.
 
 ## 12. Evidencias
 
-Guardar capturas en `assets/evidence/`:
+Guardar capturas en `assets/evidence/` siguiendo la convención definida en `assets/evidence/README.md`.
+
+Como mínimo demostrar:
 
 - diagrama en Studio;
 - BDM;
@@ -168,8 +209,9 @@ Guardar capturas en `assets/evidence/`:
 - REST connector;
 - respuesta de la API;
 - error controlado;
+- reintento;
 - historial del caso.
 
 ## Criterio de cierre técnico
 
-Solo marcar como **Runtime Verified** cuando el proceso haya sido ejecutado en Bonita Studio y se hayan validado las rutas aprobada, rechazada y de error. El repositorio por sí solo no demuestra esa ejecución.
+Solo marcar como **Runtime Verified** cuando el proceso haya sido ejecutado en Bonita Studio y se hayan validado las rutas aprobada, rechazada y de error/recuperación. El repositorio por sí solo no demuestra esa ejecución.
