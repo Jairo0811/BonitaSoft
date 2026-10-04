@@ -1,0 +1,42 @@
+/* BonitaSoft brand asset overrides */
+.brand {
+  position: relative;
+}
+
+.brand::before {
+  content: '';
+  display: block;
+  width: 176px;
+  height: 48px;
+  flex: 0 1 176px;
+  background: url('/bonitasoft-logo.png') left center / contain no-repeat;
+}
+
+.brand-mark,
+.brand-name {
+  display: none;
+}
+
+@media (max-width: 1200px) {
+  .brand::before {
+    width: 164px;
+    height: 46px;
+    flex-basis: 164px;
+  }
+}
+
+@media (max-width: 900px) {
+  .brand::before {
+    width: 176px;
+    height: 48px;
+    flex-basis: 176px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand::before {
+    width: 152px;
+    height: 44px;
+    flex-basis: 152px;
+  }
+}
