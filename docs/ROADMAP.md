@@ -2,130 +2,136 @@
 
 ## Estado general
 
-La investigación, arquitectura, modelo de referencia, contratos, integración auxiliar, pruebas, dashboard operativo, persistencia SQLite, paquete de runtime y material de exposición están **consolidados en el repositorio**.
+**Estado del repositorio: CODE COMPLETE ✅**
 
-Queda un único gate que no puede validarse solo desde Git/GitHub: ejecutar el proceso dentro de la versión concreta de **Bonita Studio** utilizada por el equipo y capturar las evidencias de runtime.
+La investigación, arquitectura, BPMN definitivo, BDM, contratos, organización, actores, formularios especificados, expresiones Groovy, REST connector, recuperación de errores, FastAPI, SQLite, dashboard React, pruebas, CI, demo y material académico están consolidados en `main`.
+
+El único gate restante no es de código: **ejecutar el proceso en la versión concreta de Bonita Studio instalada por el equipo y capturar evidencia real del runtime**.
 
 ---
 
 ## Fase 0 — Inicialización ✅
 
 - [x] Repositorio independiente.
-- [x] Datos académicos.
-- [x] Integrantes.
+- [x] Datos académicos e integrantes.
 - [x] Estructura documental.
 - [x] Enfoque BPM/SOA.
 
-## Fase 1 — Investigación + proceso ✅
+## Fase 1 — Investigación académica ✅
 
-- [x] Desarrollar los 11 puntos solicitados por la Práctica 3.
-- [x] Investigar SOA y BPM.
-- [x] Documentar historia, características, módulos y componentes.
-- [x] Analizar competidores.
-- [x] Dimensionamiento de referencia para 500 usuarios.
-- [x] Elementos SOA con Bonita.
-- [x] Modelo de costos/TCO para 500 usuarios.
-- [x] Aspectos adicionales: seguridad, extensibilidad, DevOps y auditoría.
-- [x] Seleccionar proceso: Solicitud de acceso a sistema.
-- [x] AS-IS y TO-BE.
-- [x] Actores, datos, reglas y criterios de éxito.
+- [x] Los 11 puntos de la Práctica 3 están desarrollados en `docs/research/`.
+- [x] SOA y BPM.
+- [x] Historia, características, módulos y componentes.
+- [x] Competidores.
+- [x] Dimensionamiento para 500 usuarios.
+- [x] Elementos SOA.
+- [x] Costos/TCO.
+- [x] Seguridad, extensibilidad, DevOps y auditoría.
+- [x] AS-IS / TO-BE, actores, reglas y criterios de éxito.
 
-## Fase 2 — Modelado BPMN ✅ / Runtime pending
+## Fase 2 — BPMN definitivo ✅
 
-- [x] Definir eventos de inicio y fin.
-- [x] Definir tarea humana.
-- [x] Definir tarea automática/integración.
-- [x] Gateway aprobado/rechazado.
-- [x] Ruta de error y reintento.
-- [x] Crear especificación formal.
-- [x] Crear BPMN 2.0 de referencia.
-- [ ] Validar el diagrama final dentro de Bonita Studio.
+- [x] Inicio y finales.
+- [x] Validación.
+- [x] Human Task de aprobación.
+- [x] Gateway Aprobada/Rechazada.
+- [x] Service Task REST.
+- [x] Boundary Error sobre la integración.
+- [x] Tarea de recuperación y reintento.
+- [x] BPMN 2.0 definitivo: `process/bpmn/solicitud-acceso-final.bpmn`.
+- [x] BPMN portable validado por CI.
+- [ ] Importar/recrear y validar visualmente en Bonita Studio.
 
-> El `.bpmn` del repositorio es un artefacto estándar de referencia, no se presenta como el archivo ejecutable final de Bonita.
+> El BPMN del repositorio es estándar BPMN 2.0. La configuración ejecutable específica de Bonita depende de la versión de Studio usada localmente.
 
-## Fase 3 — Implementación Bonita — paquete completo 🟡
+## Fase 3 — Implementación Bonita preparada ✅ / Runtime local pendiente
 
-- [x] Definir organización y actores.
-- [x] Definir Business Data Model.
-- [x] Definir contratos.
-- [x] Definir formularios y validaciones.
-- [x] Definir tarea humana.
-- [x] Definir reglas del gateway.
-- [x] Crear runbook paso a paso.
-- [x] Crear paquete detallado `process/bonita/`.
-- [x] Documentar expresiones Groovy de apoyo.
-- [x] Documentar estados funcionales del caso.
-- [x] Crear checklist de runtime.
-- [x] Crear convención de evidencias.
-- [ ] Aplicar/validar configuración en Bonita Studio.
+- [x] BDM `SolicitudAcceso` definido.
+- [x] Business variable `solicitudAcceso` definida.
+- [x] Organización `/Empresa/Solicitantes` y `/Empresa/Aprobadores` definida.
+- [x] Usuarios de demo y actores definidos.
+- [x] Contrato de inicio definido.
+- [x] Contrato de aprobación definido.
+- [x] Formularios y validaciones especificados.
+- [x] Operaciones BDM y expresiones Groovy preparadas.
+- [x] Estados funcionales definidos.
+- [x] Manifiestos machine-readable en `process/bonita/runtime/`.
+- [x] Runbook final `process/bonita/RUNTIME_EXECUTION_PACKET.md`.
+- [x] Validador `scripts/validate-bonita-pack.py`.
+- [x] CI `Bonita Runtime Pack CI` en verde.
+- [ ] Aplicar/desplegar esta configuración en Bonita Studio local.
 
-Documentos:
+## Fase 4 — Integración REST ✅ / Ejecución desde Bonita pendiente
 
-- `docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md`
-- `process/bonita/README.md`
-- `process/bonita/RUNTIME_CHECKLIST.md`
-
-## Fase 4 — Integración ✅ / Bonita connector pending
-
-- [x] Seleccionar API local open source: FastAPI.
-- [x] Implementar `POST /provision`.
-- [x] Implementar `GET /audit/{request_id}`.
-- [x] Health endpoint.
+- [x] FastAPI local.
+- [x] `POST /provision`.
+- [x] `GET /audit` y `GET /audit/{request_id}`.
+- [x] `/health`.
 - [x] Idempotencia por `request_id`.
 - [x] Persistencia SQLite.
-- [x] Dockerfile.
-- [x] Documentar payload y respuesta.
-- [x] Documentar manejo de errores.
-- [x] Documentar configuración exacta del connector en `process/bonita/REST_CONNECTOR.md`.
-- [ ] Configurar y ejecutar el REST Connector dentro de Bonita Studio.
+- [x] Payload JSON definitivo.
+- [x] Mapeo `external_reference` → `solicitudAcceso.externalReference`.
+- [x] Estado final `COMPLETADA` especificado.
+- [x] Configuración del connector versionada en `process/bonita/runtime/rest-connector.json`.
+- [ ] Ejecutar el REST Connector desde Bonita Studio.
 
-## Fase 5 — Pruebas y auditoría ✅ / E2E Bonita pending
+## Fase 5 — Error, reintento, pruebas y auditoría ✅ / E2E Bonita pendiente
 
-- [x] Diseñar casos de prueba.
-- [x] Crear pruebas automatizadas para la Mock API.
-- [x] Agregar CI de la Mock API.
-- [x] Definir ruta aprobada.
-- [x] Definir ruta rechazada.
-- [x] Definir prueba de API caída.
-- [x] Definir recuperación/reintento.
-- [x] Definir evidencia de auditoría.
-- [x] Dashboard React alimentado por datos reales SQLite/FastAPI.
-- [ ] Ejecutar casos end-to-end desde Bonita.
+- [x] Ruta aprobada definida.
+- [x] Ruta rechazada definida.
+- [x] API caída definida.
+- [x] Boundary Error definido en BPMN.
+- [x] Estado `ERROR_INTEGRACION` definido.
+- [x] Recuperación/reintento definido.
+- [x] Escenarios `E2E-01` a `E2E-05` versionados.
+- [x] Mock API con tests automatizados y CI.
+- [x] Dashboard con datos reales SQLite/FastAPI.
+- [x] Convención de evidencias definida.
+- [ ] Ejecutar E2E-01 a E2E-05 dentro de Bonita Studio.
 - [ ] Capturar evidencias reales del runtime.
 
-## Fase 6 — Demo y entrega académica ✅ / ejecución pending
+## Fase 6 — Demo y entrega ✅ / evidencia Bonita pendiente
 
 - [x] Guion de demo.
 - [x] Datos de demostración.
-- [x] Outline de presentación.
-- [x] Fuentes para diapositivas.
-- [x] Documentación técnica consolidada.
-- [x] Estructura para evidencias.
-- [x] Convención de nombres en `assets/evidence/README.md`.
+- [x] Presentación y fuentes.
+- [x] README final.
+- [x] Launcher local Windows.
+- [x] Helper de runtime Bonita/FastAPI.
+- [x] Branding final.
+- [x] Frontend responsive + Font Awesome.
 - [ ] Capturas finales de Bonita Studio.
-- [ ] Demo final en el entorno del equipo.
+- [ ] Demo final del runtime Bonita.
 
 ---
 
-## Criterio de cierre académico
+## Matriz de cierre
 
-### Investigación
+| Área | Estado |
+|---|:---:|
+| Investigación | ✅ 100% |
+| React / TypeScript / Vite | ✅ 100% |
+| FastAPI / SQLite | ✅ 100% |
+| BPMN y paquete Bonita | ✅ 100% repo-side |
+| CI del paquete Bonita | ✅ |
+| Pruebas API / frontend | ✅ |
+| Runtime Bonita Studio | 🟡 Requiere ejecución local |
+| Evidencias Bonita | 🟡 Pendientes |
 
-**Lista.** Los 11 puntos de la Práctica 3 están documentados en `docs/research/`.
+## Criterio para `Runtime Verified`
 
-### Complemento práctico
+Solo cambiar el proyecto a **COMPLETO 100% / Runtime Verified** cuando existan evidencias reales de Bonita Studio para:
 
-**Preparado para ejecución.** El repositorio contiene diseño, contratos, API, persistencia, dashboard, pruebas, CI, runbook y paquete de runtime.
+1. BDM desplegado;
+2. organización y actores desplegados;
+3. formulario de inicio;
+4. Human Task ejecutada por el aprobador;
+5. ruta aprobada;
+6. ruta rechazada;
+7. REST `/provision` exitoso;
+8. `externalReference` persistida;
+9. API caída con fallo real del connector;
+10. reintento/replay exitoso;
+11. auditoría y trazabilidad del caso.
 
-### Runtime Verified
-
-Solo marcar como **COMPLETO 100% / Runtime Verified** cuando el equipo ejecute en Bonita Studio:
-
-1. ruta aprobada;
-2. ruta rechazada;
-3. REST connector exitoso;
-4. error de integración;
-5. recuperación/reintento;
-6. trazabilidad del caso.
-
-No se debe sustituir esta verificación con una afirmación documental.
+Hasta ese momento, el estado correcto es **CODE COMPLETE / Runtime Verification Pending**. No se sustituye una ejecución real de Bonita con una afirmación documental.
