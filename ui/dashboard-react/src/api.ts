@@ -36,6 +36,16 @@ export type DashboardStats = {
   rest_requests: number;
 };
 
+export type AuditRecord = {
+  request_id: string;
+  user_email: string;
+  system: string;
+  access_level: string;
+  status: string;
+  external_reference: string;
+  provisioned_at: string;
+};
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -70,6 +80,8 @@ export const api = {
   health: () => request<{ status: string }>('/health'),
   listRequests: () => request<AccessRequest[]>('/requests'),
   stats: () => request<DashboardStats>('/stats'),
+  listAudit: () => request<AuditRecord[]>('/audit'),
+  getAudit: (id: string) => request<AuditRecord>(`/audit/${encodeURIComponent(id)}`),
   createRequest: (payload: AccessRequestCreate) =>
     request<AccessRequest>('/requests', {
       method: 'POST',
