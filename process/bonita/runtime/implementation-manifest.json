@@ -1,0 +1,47 @@
+{
+  "project": "BonitaSoft ISO-815",
+  "process": {
+    "name": "Solicitud de acceso a sistema corporativo",
+    "version": "1.0",
+    "businessVariable": "solicitudAcceso",
+    "bpmnReference": "process/bpmn/solicitud-acceso-final.bpmn"
+  },
+  "bdm": {
+    "package": "com.jmsoftware.bonitasoft.model",
+    "object": "SolicitudAcceso",
+    "attributes": [
+      {"name":"requestId","type":"String","required":true},
+      {"name":"nombreSolicitante","type":"String","required":true},
+      {"name":"correo","type":"String","required":true},
+      {"name":"departamento","type":"String","required":true},
+      {"name":"sistema","type":"String","required":true},
+      {"name":"nivelAcceso","type":"String","required":true},
+      {"name":"justificacion","type":"String","required":true},
+      {"name":"estado","type":"String","required":true},
+      {"name":"aprobada","type":"Boolean","required":false},
+      {"name":"comentarioAprobador","type":"String","required":false},
+      {"name":"externalReference","type":"String","required":false},
+      {"name":"createdAt","type":"DateTime","required":true},
+      {"name":"closedAt","type":"DateTime","required":false}
+    ]
+  },
+  "states": ["PENDIENTE","EN_REVISION","APROBADA","RECHAZADA","PROVISIONANDO","COMPLETADA","ERROR_INTEGRACION"],
+  "actors": [
+    {"name":"Solicitante","group":"/Empresa/Solicitantes","role":"member"},
+    {"name":"Aprobador","group":"/Empresa/Aprobadores","role":"member"}
+  ],
+  "contracts": {
+    "start": ["nombreSolicitante","correo","departamento","sistema","nivelAcceso","justificacion"],
+    "approval": ["aprobada","comentarioAprobador"]
+  },
+  "integration": {
+    "method": "POST",
+    "url": "http://localhost:8000/provision",
+    "contentType": "application/json",
+    "requestFields": ["request_id","user_email","system","access_level"],
+    "responseFields": ["request_id","status","external_reference","provisioned_at"],
+    "successStatus": "PROVISIONED",
+    "bdmReferenceField": "externalReference"
+  },
+  "e2e": ["approved","rejected","api-down","retry","audit"]
+}
