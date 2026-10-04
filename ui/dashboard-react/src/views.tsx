@@ -1,5 +1,13 @@
 import { useMemo, useState } from 'react';
-import type { AccessRequest, AuditRecord, DashboardStats, RequestStatus } from './api';
+import { api } from './api';
+import type {
+  AccessRequest,
+  AuditRecord,
+  DashboardStats,
+  RequestEvent,
+  RequestStatus,
+  UserSummary,
+} from './api';
 
 type Action = 'approve' | 'reject' | 'retry';
 
@@ -7,6 +15,7 @@ type CommonProps = {
   requests: AccessRequest[];
   stats: DashboardStats;
   auditRecords: AuditRecord[];
+  users: UserSummary[];
   query: string;
   apiOnline: boolean;
   busyId: string;
@@ -29,6 +38,15 @@ const statusTone: Record<RequestStatus, string> = {
   COMPLETED: 'success',
   REJECTED: 'danger',
   ERROR: 'danger',
+};
+
+const eventLabel: Record<string, string> = {
+  REQUEST_CREATED: 'Solicitud creada',
+  APPROVED: 'Aprobación humana',
+  RETRY_STARTED: 'Reintento iniciado',
+  PROVISIONED: 'Aprovisionamiento completado',
+  PROVISION_FAILED: 'Error de integración',
+  REJECTED: 'Solicitud rechazada',
 };
 
 const formatDate = (iso: string) =>
@@ -87,10 +105,10 @@ export function DashboardView(props: CommonProps) {
   return (
     <>
       <section className="metric-grid" aria-label="Indicadores principales">
-        <article className="metric-card blue"><div className="metric-icon">▤</div><div><span>Instancias totales</span><strong>{stats.total}</strong><small>Datos de la API</small></div></article>
+        <article className="metric-card blue"><div className="metric-icon">▤</div><div><span>Instancias totales</span><strong>{stats.total}</strong><small>Persistidas en SQLite</small></div></article>
         <article className="metric-card green"><div className="metric-icon">✓</div><div><span>Completadas</span><strong>{stats.completed}</strong><small>{completedPercent}% del total</small></div></article>
         <article className="metric-card red"><div className="metric-icon">◷</div><div><span>Pendientes</span><strong>{stats.pending}</strong><small>{stats.error} con error</small></div></article>
-        <article className="metric-card blue"><div className="metric-icon">↔</div><div><span>Integraciones REST</span><strong>{stats.rest_requests}</strong><small>{auditRecords.length} registros de auditoría</small></div></article>
+        <article className="metric-card blue"><div className="metric-icon">↔</div><div><span>Integraciones REST</span><strong>{stats.rest_requests}</strong><small>{auditRecords.length} registros persistentes</small></div></article>
       </section>
 
       <section className="analytics-grid">
@@ -103,7 +121,7 @@ export function DashboardView(props: CommonProps) {
         </article>
 
         <article className="panel status-panel">
-          <div className="panel-title"><div><span>Estado del proceso</span><small>Distribución desde la API</small></div></div>
+          <div className="panel-title"><div><span>Estado del proceso</span><small>Distribución desde SQLite</small></div></div>
           <div className="status-content">
             <div className="donut" style={{ background: `conic-gradient(#2f80ff 0 ${completedPercent}%, #ff1744 ${completedPercent}% ${completedPercent + progressPercent}%, #f59e0b ${completedPercent + progressPercent}% ${completedPercent + progressPercent + pendingPercent}%, #8fa6d8 ${completedPercent + progressPercent + pendingPercent}% 100%)` }}><span><strong>{stats.total}</strong><small>Total</small></span></div>
             <div className="status-list">
@@ -119,7 +137,7 @@ export function DashboardView(props: CommonProps) {
           <div className="panel-title"><div><span>Integración</span><small>Servicio auxiliar FastAPI</small></div></div>
           <div className={`api-health ${apiOnline ? '' : 'api-offline'}`}><span className="pulse" /><div><strong>REST /provision</strong><small>Estado: {apiOnline ? 'disponible' : 'sin conexión'}</small></div></div>
           <div className="api-stats"><span><b>{stats.rest_requests}</b><small>requests</small></span><span><b>{stats.pending}</b><small>pendientes</small></span><span><b>{stats.error}</b><small>errores</small></span></div>
-          <code>POST http://localhost:8000/provision</code>
+          <code>POST {api.baseUrl}/provision</code>
         </article>
       </section>
 
@@ -201,13 +219,75 @@ export function ProcessesView(props: CommonProps) {
 
 export function CasesView(props: CommonProps) {
   const [statusFilter, setStatusFilter] = useState<'ALL' | RequestStatus>('ALL');
+  const [selectedRequest, setSelectedRequest] = useState<AccessRequest | null>(null);
+  const [events, setEvents] = useState<RequestEvent[]>([]);
+  const [detailLoading, setDetailLoading] = useState(false);
   const filtered = props.requests.filter((request) => requestMatches(request, props.query)).filter((request) => statusFilter === 'ALL' || request.status === statusFilter);
+
+  const openCase = async (request: AccessRequest) => {
+    setSelectedRequest(request);
+    setEvents([]);
+    setDetailLoading(true);
+    try {
+      const history = await api.getRequestEvents(request.id);
+      setEvents(history);
+    } finally {
+      setDetailLoading(false);
+    }
+  };
+
+  const detailAction = async (action: Action) => {
+    if (!selectedRequest) return;
+    await props.onAction(selectedRequest.id, action);
+    const [fresh, history] = await Promise.all([
+      api.getRequest(selectedRequest.id),
+      api.getRequestEvents(selectedRequest.id),
+    ]);
+    setSelectedRequest(fresh);
+    setEvents(history);
+  };
+
   return (
     <div className="section-stack">
       <article className="panel section-panel">
-        <div className="section-toolbar"><div><strong>Casos e instancias</strong><small>{filtered.length} de {props.requests.length} visibles</small></div><div className="filter-chips">{(['ALL', 'PENDING_APPROVAL', 'COMPLETED', 'REJECTED', 'ERROR'] as const).map((filter) => <button type="button" key={filter} className={statusFilter === filter ? 'active' : ''} onClick={() => setStatusFilter(filter)}>{filter === 'ALL' ? 'Todos' : statusLabel[filter]}</button>)}</div></div>
-        <RequestTable requests={filtered} busyId={props.busyId} onAction={props.onAction} showActions />
+        <div className="section-toolbar"><div><strong>Casos e instancias</strong><small>{filtered.length} de {props.requests.length} visibles · selecciona un ID para ver su historial</small></div><div className="filter-chips">{(['ALL', 'PENDING_APPROVAL', 'COMPLETED', 'REJECTED', 'ERROR'] as const).map((filter) => <button type="button" key={filter} className={statusFilter === filter ? 'active' : ''} onClick={() => setStatusFilter(filter)}>{filter === 'ALL' ? 'Todos' : statusLabel[filter]}</button>)}</div></div>
+        <RequestTable requests={filtered} busyId={props.busyId} onAction={props.onAction} showActions onOpen={openCase} />
       </article>
+
+      {selectedRequest && (
+        <div className="case-detail-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelectedRequest(null); }}>
+          <section className="case-detail-panel" role="dialog" aria-modal="true" aria-labelledby="case-detail-title">
+            <header className="case-detail-header">
+              <div><span className="eyebrow">Detalle persistente</span><h2 id="case-detail-title">{selectedRequest.id}</h2><p>{selectedRequest.requester_name} · {selectedRequest.user_email}</p></div>
+              <button type="button" aria-label="Cerrar detalle" onClick={() => setSelectedRequest(null)}>×</button>
+            </header>
+
+            <div className="case-detail-grid">
+              <span><small>Sistema</small><b>{selectedRequest.system}</b></span>
+              <span><small>Nivel</small><b>{selectedRequest.access_level}</b></span>
+              <span><small>Estado</small><StatusBadge status={selectedRequest.status} /></span>
+              <span><small>Referencia</small><code>{selectedRequest.external_reference ?? '—'}</code></span>
+            </div>
+
+            <div className="case-detail-justification"><small>Justificación</small><p>{selectedRequest.justification}</p></div>
+
+            <div className="case-detail-actions"><RequestActions request={selectedRequest} busyId={props.busyId} onAction={(_, action) => detailAction(action)} /></div>
+
+            <div className="case-history">
+              <div className="panel-title"><div><span>Historial del caso</span><small>Eventos almacenados en SQLite</small></div></div>
+              {detailLoading && <p className="empty-state">Cargando trazabilidad…</p>}
+              {!detailLoading && events.length === 0 && <EmptyPanel title="Sin eventos" text="No se encontraron eventos para esta solicitud." />}
+              {!detailLoading && events.map((event) => (
+                <div className="history-event" key={event.id}>
+                  <span className={`history-dot ${event.event_type.includes('FAILED') || event.event_type === 'REJECTED' ? 'danger' : event.event_type === 'PROVISIONED' ? 'success' : ''}`} />
+                  <div><strong>{eventLabel[event.event_type] ?? event.event_type}</strong><p>{event.message}</p><small>{event.from_status ?? '—'} → {event.to_status ?? '—'}</small></div>
+                  <time>{formatDate(event.occurred_at)}</time>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }
@@ -235,26 +315,29 @@ export function IntegrationsView(props: CommonProps) {
     window.setTimeout(() => setCopied(''), 1400);
   };
   const endpoints = [
-    ['GET', '/health', 'Health check del servicio'],
-    ['GET', '/requests', 'Listado de solicitudes'],
+    ['GET', '/health', 'Health check + SQLite'],
+    ['GET', '/requests', 'Listado persistente de solicitudes'],
+    ['GET', '/requests/{id}', 'Detalle de una solicitud'],
+    ['GET', '/requests/{id}/events', 'Historial persistente del caso'],
     ['POST', '/requests', 'Creación de solicitudes'],
     ['POST', '/requests/{id}/approve', 'Aprobación + aprovisionamiento'],
     ['POST', '/provision', 'Aprovisionamiento idempotente'],
     ['GET', '/audit', 'Trazabilidad de integraciones'],
+    ['GET', '/users', 'Usuarios persistentes'],
     ['GET', '/stats', 'Indicadores operativos'],
   ];
   return (
     <div className="section-stack">
       <section className="integration-hero panel">
-        <div><span className={`service-orb ${props.apiOnline ? 'online' : 'offline'}`}>↔</span><div><h2>FastAPI Provisioning Service</h2><p>{props.apiOnline ? 'Servicio local disponible y respondiendo.' : 'Servicio sin conexión.'}</p><code>http://localhost:8000</code></div></div>
+        <div><span className={`service-orb ${props.apiOnline ? 'online' : 'offline'}`}>↔</span><div><h2>FastAPI Provisioning Service</h2><p>{props.apiOnline ? 'Servicio local disponible con persistencia SQLite.' : 'Servicio sin conexión.'}</p><code>{api.baseUrl}</code></div></div>
         <button className="secondary-action" type="button" onClick={() => void props.onRefresh()}>↻ Verificar conexión</button>
       </section>
       <section className="section-summary-grid"><SummaryCard label="REST completados" value={props.stats.rest_requests} icon="↔" tone="blue" /><SummaryCard label="Auditorías" value={props.auditRecords.length} icon="◎" tone="green" /><SummaryCard label="Errores actuales" value={props.stats.error} icon="!" tone="danger" /></section>
       <article className="panel section-panel">
-        <div className="panel-title"><div><span>Endpoints</span><small>Contrato de integración local</small></div></div>
+        <div className="panel-title"><div><span>Endpoints</span><small>Contrato de integración y persistencia local</small></div></div>
         <div className="endpoint-list">
           {endpoints.map(([method, path, description]) => {
-            const full = `http://localhost:8000${path}`;
+            const full = `${api.baseUrl}${path}`;
             return <button className="endpoint-row" type="button" key={`${method}-${path}`} onClick={() => void copy(full)}><span className={`http-method ${method.toLowerCase()}`}>{method}</span><code>{path}</code><span>{description}</span><b>{copied === full ? 'Copiado ✓' : 'Copiar'}</b></button>;
           })}
         </div>
@@ -273,7 +356,7 @@ export function AuditView(props: CommonProps) {
     <div className="section-stack">
       <section className="section-summary-grid"><SummaryCard label="Registros" value={props.auditRecords.length} icon="◎" tone="blue" /><SummaryCard label="Aprovisionados" value={props.auditRecords.filter((x) => x.status === 'PROVISIONED').length} icon="✓" tone="green" /><SummaryCard label="Referencias ACC" value={props.auditRecords.filter((x) => x.external_reference.startsWith('ACC-')).length} icon="#" tone="warning" /></section>
       <article className="panel section-panel">
-        <div className="panel-title"><div><span>Trazabilidad REST</span><small>Registros emitidos por el servicio de aprovisionamiento</small></div></div>
+        <div className="panel-title"><div><span>Trazabilidad REST</span><small>Registros persistidos por el servicio de aprovisionamiento</small></div></div>
         <div className="audit-timeline">
           {filtered.length === 0 && <EmptyPanel title="Sin registros" text="Aprueba una solicitud para generar una entrada de auditoría." />}
           {filtered.map((record) => (
@@ -287,30 +370,23 @@ export function AuditView(props: CommonProps) {
 
 export function UsersView(props: CommonProps) {
   const users = useMemo(() => {
-    const map = new Map<string, { name: string; email: string; requests: number; systems: Set<string>; last: string; completed: number }>();
-    props.requests.forEach((request) => {
-      const current = map.get(request.user_email) ?? { name: request.requester_name, email: request.user_email, requests: 0, systems: new Set<string>(), last: request.updated_at, completed: 0 };
-      current.requests += 1;
-      current.systems.add(request.system);
-      current.completed += request.status === 'COMPLETED' ? 1 : 0;
-      if (new Date(request.updated_at) > new Date(current.last)) current.last = request.updated_at;
-      map.set(request.user_email, current);
-    });
-    return [...map.values()].filter((user) => {
-      const q = props.query.trim().toLowerCase();
-      return !q || [user.name, user.email, ...user.systems].some((value) => value.toLowerCase().includes(q));
-    });
-  }, [props.requests, props.query]);
+    const q = props.query.trim().toLowerCase();
+    if (!q) return props.users;
+    return props.users.filter((user) => [user.name, user.email, ...user.systems].some((value) => value.toLowerCase().includes(q)));
+  }, [props.users, props.query]);
+
+  const uniqueSystems = new Set(props.users.flatMap((user) => user.systems)).size;
 
   return (
     <div className="section-stack">
-      <section className="section-summary-grid"><SummaryCard label="Usuarios únicos" value={users.length} icon="♙" tone="blue" /><SummaryCard label="Con accesos completados" value={users.filter((x) => x.completed > 0).length} icon="✓" tone="green" /><SummaryCard label="Sistemas solicitados" value={new Set(props.requests.map((x) => x.system)).size} icon="▦" tone="warning" /></section>
+      <section className="section-summary-grid"><SummaryCard label="Usuarios persistentes" value={props.users.length} icon="♙" tone="blue" /><SummaryCard label="Con accesos completados" value={props.users.filter((x) => x.completed_count > 0).length} icon="✓" tone="green" /><SummaryCard label="Sistemas solicitados" value={uniqueSystems} icon="▦" tone="warning" /></section>
       <article className="panel section-panel">
-        <div className="panel-title"><div><span>Usuarios del proceso</span><small>Derivados de las solicitudes de la sesión</small></div></div>
+        <div className="panel-title"><div><span>Usuarios del proceso</span><small>Entidades persistidas en SQLite</small></div></div>
         <div className="user-grid">
           {users.map((user) => (
-            <article className="user-card" key={user.email}><span className="user-avatar">{user.name.split(' ').slice(0, 2).map((part) => part[0]).join('').toUpperCase()}</span><div><strong>{user.name}</strong><small>{user.email}</small><p>{[...user.systems].join(' · ')}</p></div><div className="user-meta"><b>{user.requests}</b><small>solicitudes</small><span>{user.completed} completadas</span><time>{formatDate(user.last)}</time></div></article>
+            <article className="user-card" key={user.email}><span className="user-avatar">{user.name.split(' ').slice(0, 2).map((part) => part[0]).join('').toUpperCase()}</span><div><strong>{user.name}</strong><small>{user.email}</small><p>{user.systems.join(' · ')}</p></div><div className="user-meta"><b>{user.request_count}</b><small>solicitudes</small><span>{user.completed_count} completadas</span><time>{formatDate(user.last_activity)}</time></div></article>
           ))}
+          {users.length === 0 && <EmptyPanel title="Sin usuarios" text="No hay usuarios que coincidan con la búsqueda." />}
         </div>
       </article>
     </div>
@@ -321,11 +397,11 @@ function SummaryCard({ label, value, icon, tone }: { label: string; value: numbe
   return <article className={`summary-card ${tone}`}><span>{icon}</span><div><small>{label}</small><strong>{value}</strong></div></article>;
 }
 
-function RequestTable({ requests, busyId, onAction, showActions }: { requests: AccessRequest[]; busyId: string; onAction: CommonProps['onAction']; showActions: boolean }) {
+function RequestTable({ requests, busyId, onAction, showActions, onOpen }: { requests: AccessRequest[]; busyId: string; onAction: CommonProps['onAction']; showActions: boolean; onOpen?: (request: AccessRequest) => void }) {
   return (
     <div className="table-scroll">
       <table className="cases-table"><thead><tr><th>ID</th><th>Solicitante</th><th>Sistema</th><th>Nivel</th><th>Estado</th><th>Actualización</th><th>Referencia</th>{showActions && <th>Acciones</th>}</tr></thead><tbody>
-        {requests.map((request) => <tr key={request.id}><td className="case-id">{request.id}</td><td><strong>{request.requester_name}</strong><small>{request.user_email}</small></td><td>{request.system}</td><td>{request.access_level}</td><td><StatusBadge status={request.status} /></td><td>{formatDate(request.updated_at)}</td><td><code>{request.external_reference ?? '—'}</code></td>{showActions && <td><RequestActions request={request} busyId={busyId} onAction={onAction} /></td>}</tr>)}
+        {requests.map((request) => <tr key={request.id}><td className="case-id">{onOpen ? <button className="case-link" type="button" onClick={() => onOpen(request)}>{request.id}</button> : request.id}</td><td><strong>{request.requester_name}</strong><small>{request.user_email}</small></td><td>{request.system}</td><td>{request.access_level}</td><td><StatusBadge status={request.status} /></td><td>{formatDate(request.updated_at)}</td><td><code>{request.external_reference ?? '—'}</code></td>{showActions && <td><RequestActions request={request} busyId={busyId} onAction={onAction} /></td>}</tr>)}
       </tbody></table>
       {requests.length === 0 && <EmptyPanel title="Sin resultados" text="No existen casos que coincidan con los filtros actuales." />}
     </div>
