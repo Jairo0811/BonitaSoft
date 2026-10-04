@@ -1,4 +1,4 @@
-# BonitaSoft — ISO-815
+<img src="assets/bonitasoft-logo.png" alt="SOAForge — Enterprise Application Integration Lab" width="100%" />
 
 <div align="center">
 
