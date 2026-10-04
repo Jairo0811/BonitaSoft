@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             id="Definitions_SolicitudAcceso_Final"
+             targetNamespace="https://github.com/Jairo0811/BonitaSoft/process/solicitud-acceso">
+  <process id="Process_SolicitudAcceso_Final" name="Solicitud de acceso a sistema corporativo" isExecutable="false">
+    <documentation>Modelo BPMN 2.0 definitivo y portable. La ejecutabilidad final se obtiene al aplicar contratos, BDM, actores, formularios y connector en la version de Bonita Studio usada por el equipo.</documentation>
+
+    <startEvent id="StartEvent_Solicitud" name="Solicitud recibida">
+      <outgoing>Flow_1</outgoing>
+    </startEvent>
+
+    <serviceTask id="Task_Validar" name="Validar solicitud">
+      <incoming>Flow_1</incoming>
+      <outgoing>Flow_2</outgoing>
+    </serviceTask>
+
+    <userTask id="Task_Aprobar" name="Revisar y decidir solicitud">
+      <incoming>Flow_2</incoming>
+      <outgoing>Flow_3</outgoing>
+    </userTask>
+
+    <exclusiveGateway id="Gateway_Decision" name="¿Aprobada?" default="Flow_Rejected">
+      <incoming>Flow_3</incoming>
+      <outgoing>Flow_Approved</outgoing>
+      <outgoing>Flow_Rejected</outgoing>
+    </exclusiveGateway>
+
+    <serviceTask id="Task_Preparar" name="Preparar aprovisionamiento">
+      <incoming>Flow_Approved</incoming>
+      <outgoing>Flow_4</outgoing>
+    </serviceTask>
+
+    <serviceTask id="Task_Provisionar" name="Provisionar acceso via REST">
+      <incoming>Flow_4</incoming>
+      <incoming>Flow_Retry</incoming>
+      <outgoing>Flow_Provisioned</outgoing>
+    </serviceTask>
+
+    <boundaryEvent id="BoundaryError_Provisionar" name="Error de integracion" attachedToRef="Task_Provisionar" cancelActivity="true">
+      <outgoing>Flow_Error</outgoing>
+      <errorEventDefinition id="ErrorDefinition_Provisionar" />
+    </boundaryEvent>
+
+    <userTask id="Task_Error" name="Resolver error de integracion">
+      <incoming>Flow_Error</incoming>
+      <outgoing>Flow_Retry</outgoing>
+    </userTask>
+
+    <serviceTask id="Task_Completar" name="Completar solicitud">
+      <incoming>Flow_Provisioned</incoming>
+      <outgoing>Flow_Completed</outgoing>
+    </serviceTask>
+
+    <serviceTask id="Task_Rechazar" name="Registrar rechazo">
+      <incoming>Flow_Rejected</incoming>
+      <outgoing>Flow_RejectedEnd</outgoing>
+    </serviceTask>
+
+    <endEvent id="EndEvent_Aprobada" name="Solicitud completada">
+      <incoming>Flow_Completed</incoming>
+    </endEvent>
+
+    <endEvent id="EndEvent_Rechazada" name="Solicitud rechazada">
+      <incoming>Flow_RejectedEnd</incoming>
+    </endEvent>
+
+    <sequenceFlow id="Flow_1" sourceRef="StartEvent_Solicitud" targetRef="Task_Validar" />
+    <sequenceFlow id="Flow_2" sourceRef="Task_Validar" targetRef="Task_Aprobar" />
+    <sequenceFlow id="Flow_3" sourceRef="Task_Aprobar" targetRef="Gateway_Decision" />
+    <sequenceFlow id="Flow_Approved" name="Si" sourceRef="Gateway_Decision" targetRef="Task_Preparar">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[solicitudAcceso.aprobada == true]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_Rejected" name="No" sourceRef="Gateway_Decision" targetRef="Task_Rechazar" />
+    <sequenceFlow id="Flow_4" sourceRef="Task_Preparar" targetRef="Task_Provisionar" />
+    <sequenceFlow id="Flow_Provisioned" sourceRef="Task_Provisionar" targetRef="Task_Completar" />
+    <sequenceFlow id="Flow_Error" name="Error tecnico" sourceRef="BoundaryError_Provisionar" targetRef="Task_Error" />
+    <sequenceFlow id="Flow_Retry" name="Reintentar" sourceRef="Task_Error" targetRef="Task_Provisionar" />
+    <sequenceFlow id="Flow_Completed" sourceRef="Task_Completar" targetRef="EndEvent_Aprobada" />
+    <sequenceFlow id="Flow_RejectedEnd" sourceRef="Task_Rechazar" targetRef="EndEvent_Rechazada" />
+  </process>
+</definitions>
