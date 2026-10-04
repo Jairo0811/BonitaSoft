@@ -6,6 +6,7 @@ import '../../theme/bonitasoft-components.css';
 import './styles.css';
 import './functional.css';
 import './sections.css';
+import './persistence.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
