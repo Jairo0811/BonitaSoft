@@ -46,10 +46,10 @@ El trabajo combina la investigación requerida sobre **Bonita / BonitaSoft BPM**
 
 | 👤 Integrante | 🆔 Matrícula |
 |---|---|
-| 👨🏻‍💻 Enmanueli Alfonso Rondon Marrero | A00115575 |
-| 👨🏻‍💻 Francis Jairo Matias Rosario | A00115261 |
-| 👨🏻‍💻 Eliandres Rodriguez Cepeda | A00112070 |
 | 👨🏻‍💻 Jorge Alexander Minier Terrero | A00105678 |
+| 👨🏻‍💻 Eliandres Rodriguez Cepeda | A00112070 |
+| 👨🏻‍💻 Francis Jairo Matias Rosario | A00115261 |
+| 👨🏻‍💻 Enmanueli Alfonso Rondon Marrero | A00115575 |
 
 > **Eliandres Rodriguez Cepeda participa en BonitaSoft / ISO-815 y no pertenece a SOAForge / ISO-810.**
 
