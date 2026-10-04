@@ -14,14 +14,14 @@ import {
 } from './views';
 
 const navItems = [
-  ['Dashboard', '▦'],
-  ['Mis tareas', '✓'],
-  ['Procesos', '◇'],
-  ['Casos', '□'],
-  ['Diseño BPMN', '⌘'],
-  ['Integraciones', '↔'],
-  ['Auditoría', '◎'],
-  ['Usuarios', '♙'],
+  ['Dashboard', 'fa-table-columns'],
+  ['Mis tareas', 'fa-list-check'],
+  ['Procesos', 'fa-diagram-project'],
+  ['Casos', 'fa-folder-open'],
+  ['Diseño BPMN', 'fa-sitemap'],
+  ['Integraciones', 'fa-plug'],
+  ['Auditoría', 'fa-clock-rotate-left'],
+  ['Usuarios', 'fa-users'],
 ] as const;
 
 type NavName = (typeof navItems)[number][0];
@@ -100,6 +100,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [form, setForm] = useState<AccessRequestCreate>(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
 
@@ -135,6 +136,23 @@ export default function App() {
     void loadDashboard();
   }, [loadDashboard]);
 
+  useEffect(() => {
+    if (!sidebarOpen) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSidebarOpen(false);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [sidebarOpen]);
+
   const actionableRequests = useMemo(
     () => requests.filter((item) => item.status === 'PENDING_APPROVAL' || item.status === 'ERROR'),
     [requests],
@@ -146,6 +164,11 @@ export default function App() {
     month: 'long',
     year: 'numeric',
   }).format(new Date());
+
+  const navigateTo = (nav: NavName) => {
+    setActiveNav(nav);
+    setSidebarOpen(false);
+  };
 
   const handleCreate = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -215,16 +238,19 @@ export default function App() {
 
   return (
     <div className="dashboard-shell">
-      <aside className="dashboard-sidebar">
+      <aside className={`dashboard-sidebar ${sidebarOpen ? 'is-open' : ''}`} aria-label="Menú principal">
         <div className="brand" aria-label="BonitaSoft">
           <span className="brand-mark" aria-hidden="true">b</span>
           <span className="brand-name">Bonita<span>Soft</span></span>
+          <button className="sidebar-close" type="button" aria-label="Cerrar menú" onClick={() => setSidebarOpen(false)}>
+            <i className="fa-solid fa-xmark" aria-hidden="true" />
+          </button>
         </div>
 
         <nav className="sidebar-nav" aria-label="Navegación principal">
           {navItems.map(([label, icon]) => (
-            <button key={label} className={`nav-item ${activeNav === label ? 'is-active' : ''}`} onClick={() => setActiveNav(label)} type="button">
-              <span className="nav-icon" aria-hidden="true">{icon}</span>
+            <button key={label} className={`nav-item ${activeNav === label ? 'is-active' : ''}`} onClick={() => navigateTo(label)} type="button">
+              <span className="nav-icon" aria-hidden="true"><i className={`fa-solid ${icon}`} /></span>
               <span>{label}</span>
               {label === 'Mis tareas' && <strong className="nav-badge">{actionableRequests.length}</strong>}
             </button>
@@ -233,23 +259,47 @@ export default function App() {
 
         <div className="quick-access">
           <p>Acceso rápido</p>
-          <button type="button" onClick={() => setModalOpen(true)}>＋ Nueva solicitud</button>
-          <button type="button" onClick={() => setActiveNav('Mis tareas')}>▷ Mis aprobaciones</button>
+          <button type="button" onClick={() => { setModalOpen(true); setSidebarOpen(false); }}>
+            <i className="fa-solid fa-plus" aria-hidden="true" /> Nueva solicitud
+          </button>
+          <button type="button" onClick={() => navigateTo('Mis tareas')}>
+            <i className="fa-solid fa-user-check" aria-hidden="true" /> Mis aprobaciones
+          </button>
         </div>
       </aside>
 
+      <button
+        className={`sidebar-overlay ${sidebarOpen ? 'is-visible' : ''}`}
+        type="button"
+        aria-label="Cerrar menú"
+        tabIndex={sidebarOpen ? 0 : -1}
+        onClick={() => setSidebarOpen(false)}
+      />
+
       <main className="dashboard-main">
         <header className="dashboard-topbar">
+          <button
+            className="mobile-menu-button"
+            type="button"
+            aria-label="Abrir menú"
+            aria-expanded={sidebarOpen}
+            onClick={() => setSidebarOpen(true)}
+          >
+            <i className="fa-solid fa-bars" aria-hidden="true" />
+          </button>
+
           <label className="search-box">
-            <span aria-hidden="true">⌕</span>
+            <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar casos, usuarios, sistemas..." aria-label="Buscar" />
           </label>
 
           <div className="topbar-actions">
             <button className={`runtime-pill runtime-button ${apiOnline ? '' : 'offline'}`} type="button" onClick={() => void loadDashboard()}>
-              <i /> {apiOnline ? 'Mock API online' : 'Mock API offline'}
+              <i className="fa-solid fa-circle" aria-hidden="true" /> {apiOnline ? 'Mock API online' : 'Mock API offline'}
             </button>
-            <button className="icon-button" type="button" aria-label="Actualizar" onClick={() => void loadDashboard()}>↻</button>
+            <button className="icon-button" type="button" aria-label="Actualizar" title="Actualizar" onClick={() => void loadDashboard()}>
+              <i className="fa-solid fa-rotate" aria-hidden="true" />
+            </button>
             <div className="profile">
               <span className="avatar">ISO</span>
               <span><strong>Equipo ISO-815</strong><small>BonitaSoft BPM</small></span>
@@ -258,7 +308,7 @@ export default function App() {
         </header>
 
         <section className="dashboard-content">
-          {notice && <div className="notice" role="status">{notice}</div>}
+          {notice && <div className="notice" role="status"><i className="fa-solid fa-circle-info" aria-hidden="true" /> {notice}</div>}
 
           <div className="page-heading">
             <div>
@@ -269,7 +319,9 @@ export default function App() {
             <div className="heading-actions">
               <span className="date-label">{today}</span>
               {loading && <span className="loading-label">Actualizando…</span>}
-              <button className="primary-action" type="button" onClick={() => setModalOpen(true)}>Nueva solicitud</button>
+              <button className="primary-action" type="button" onClick={() => setModalOpen(true)}>
+                <i className="fa-solid fa-plus" aria-hidden="true" /> Nueva solicitud
+              </button>
             </div>
           </div>
 
@@ -282,7 +334,7 @@ export default function App() {
           <section className="request-modal" role="dialog" aria-modal="true" aria-labelledby="request-title">
             <header className="modal-header">
               <div><span className="eyebrow">Nueva instancia</span><h2 id="request-title">Solicitud de acceso</h2></div>
-              <button type="button" aria-label="Cerrar" onClick={() => setModalOpen(false)}>×</button>
+              <button type="button" aria-label="Cerrar" onClick={() => setModalOpen(false)}><i className="fa-solid fa-xmark" aria-hidden="true" /></button>
             </header>
             <form className="request-form" onSubmit={(event) => void handleCreate(event)}>
               <label>Solicitante<input required minLength={2} value={form.requester_name} onChange={(event) => setForm({ ...form, requester_name: event.target.value })} placeholder="Nombre completo" /></label>
@@ -290,7 +342,7 @@ export default function App() {
               <label>Sistema<input required minLength={2} value={form.system} onChange={(event) => setForm({ ...form, system: event.target.value })} placeholder="Sistema solicitado" /></label>
               <label>Nivel de acceso<select value={form.access_level} onChange={(event) => setForm({ ...form, access_level: event.target.value })}><option>Lectura</option><option>Estándar</option><option>Operación</option><option>Supervisor</option><option>Administración</option></select></label>
               <label className="full-field">Justificación<textarea required minLength={3} value={form.justification} onChange={(event) => setForm({ ...form, justification: event.target.value })} placeholder="Explique por qué necesita el acceso." /></label>
-              <div className="modal-actions"><button className="secondary-action" type="button" onClick={() => setModalOpen(false)}>Cancelar</button><button className="primary-action" type="submit" disabled={submitting || !apiOnline}>{submitting ? 'Creando…' : 'Crear solicitud'}</button></div>
+              <div className="modal-actions"><button className="secondary-action" type="button" onClick={() => setModalOpen(false)}>Cancelar</button><button className="primary-action" type="submit" disabled={submitting || !apiOnline}>{submitting ? 'Creando…' : <><i className="fa-solid fa-plus" aria-hidden="true" /> Crear solicitud</>}</button></div>
             </form>
           </section>
         </div>
