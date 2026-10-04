@@ -7,7 +7,7 @@ Dashboard visual ejecutable para el complemento práctico de ISO-815. Implementa
 ## Funcionalidad actual
 
 - sidebar y topbar responsivos;
-- búsqueda de solicitudes en tiempo real;
+- búsqueda compartida entre casos, auditoría y usuarios;
 - indicadores calculados desde la API;
 - health check de FastAPI;
 - creación real de solicitudes locales;
@@ -16,9 +16,44 @@ Dashboard visual ejecutable para el complemento práctico de ISO-815. Implementa
 - rechazar solicitud → `POST /requests/{id}/reject`;
 - reintentar solicitudes en error;
 - referencia externa generada al aprovisionar;
-- auditoría disponible mediante `/audit/{request_id}`;
+- auditoría individual mediante `/audit/{request_id}`;
+- colección de auditoría mediante `GET /audit`;
 - tabla de instancias actualizada desde la API;
 - tema compartido desde `../theme/`.
+
+## Secciones funcionales
+
+### Dashboard
+
+Resumen operativo con KPI, distribución de estados, estado de FastAPI, flujo activo, tareas pendientes e instancias recientes.
+
+### Mis tareas
+
+Bandeja de trabajo para solicitudes en `PENDING_APPROVAL` y `ERROR`. Permite aprobar, rechazar y reintentar desde la interfaz.
+
+### Procesos
+
+Vista del proceso **Solicitud de acceso a sistema corporativo**, con métricas, actores, reglas de decisión y flujo visual.
+
+### Casos
+
+Listado completo de instancias con filtros por estado, búsqueda, referencias externas y acciones contextuales.
+
+### Diseño BPMN
+
+Vista ampliada del flujo y catálogo de elementos BPMN utilizados: inicio, validación, tarea humana, gateway, service task y eventos de fin.
+
+### Integraciones
+
+Estado del servicio FastAPI, métricas REST y catálogo de endpoints. Los endpoints pueden copiarse directamente desde la interfaz.
+
+### Auditoría
+
+Timeline de aprovisionamientos reales de la sesión actual. Consume `GET /audit` y muestra request id, usuario, sistema, nivel de acceso, referencia externa y fecha.
+
+### Usuarios
+
+Directorio derivado de las solicitudes registradas. Agrupa usuarios únicos, sistemas solicitados, cantidad de solicitudes y accesos completados.
 
 ## Ejecutar manualmente
 
@@ -81,8 +116,12 @@ COMPLETED
    ↓
 Referencia ACC-...
    ↓
-/audit/{request_id}
+GET /audit
 ```
+
+## Persistencia de la demo
+
+La Mock API utiliza almacenamiento **en memoria**. Cada reinicio de FastAPI restaura las solicitudes semilla y elimina las solicitudes/auditorías generadas durante la sesión anterior. Esto es deliberado para la demo académica y no representa almacenamiento de producción.
 
 ## Build de producción
 
