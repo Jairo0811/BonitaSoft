@@ -1,0 +1,30 @@
+name: Bonita Runtime Pack CI
+
+on:
+  push:
+    paths:
+      - 'process/bonita/**'
+      - 'process/bpmn/**'
+      - 'scripts/validate-bonita-pack.py'
+      - '.github/workflows/bonita-pack-ci.yml'
+  pull_request:
+    paths:
+      - 'process/bonita/**'
+      - 'process/bpmn/**'
+      - 'scripts/validate-bonita-pack.py'
+      - '.github/workflows/bonita-pack-ci.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate Bonita runtime pack
+        run: python scripts/validate-bonita-pack.py
