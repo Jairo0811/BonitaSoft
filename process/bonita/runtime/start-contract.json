@@ -1,0 +1,12 @@
+{
+  "name": "requestInput",
+  "inputs": [
+    {"name":"nombreSolicitante","type":"TEXT","required":true,"minLength":3,"maxLength":120},
+    {"name":"correo","type":"TEXT","required":true,"format":"email"},
+    {"name":"departamento","type":"TEXT","required":true},
+    {"name":"sistema","type":"TEXT","required":true},
+    {"name":"nivelAcceso","type":"TEXT","required":true,"allowed":["Lectura","Estándar","Operación","Supervisor","Administración"]},
+    {"name":"justificacion","type":"TEXT","required":true,"minLength":3}
+  ],
+  "operationScript": "process/bonita/runtime/initializeSolicitudAcceso.groovy"
+}
