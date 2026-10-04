@@ -7,6 +7,7 @@ import './styles.css';
 import './functional.css';
 import './sections.css';
 import './persistence.css';
+import './responsive.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
