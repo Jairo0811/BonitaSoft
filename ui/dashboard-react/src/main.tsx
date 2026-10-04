@@ -9,6 +9,7 @@ import './sections.css';
 import './persistence.css';
 import './responsive.css';
 import './real-data.css';
+import './branding.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
