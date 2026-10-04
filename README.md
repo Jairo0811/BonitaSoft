@@ -1,6 +1,35 @@
+<div align="center">
+
 # BonitaSoft — ISO-815
 
-Proyecto académico independiente para la asignatura **ISO-815 — Integración de Aplicaciones con Tecnología Open Source** de la Universidad APEC (UNAPEC).
+<img src="https://img.shields.io/badge/UNAPEC-ISO--815-003B70?style=for-the-badge" alt="UNAPEC ISO-815" />
+<img src="https://img.shields.io/badge/Primer%20Parcial-BonitaSoft%20BPM-7C3AED?style=for-the-badge" alt="Primer parcial: BonitaSoft BPM" />
+<img src="https://img.shields.io/badge/Estado-Demo%20funcional-14B8A6?style=for-the-badge" alt="Demo funcional" />
+
+<br/><br/>
+
+<a href="https://github.com/Jairo0811/BonitaSoft/actions/workflows/mock-api-ci.yml">
+  <img src="https://github.com/Jairo0811/BonitaSoft/actions/workflows/mock-api-ci.yml/badge.svg" alt="Mock API CI" />
+</a>
+<a href="https://github.com/Jairo0811/BonitaSoft/actions/workflows/dashboard-react-ci.yml">
+  <img src="https://github.com/Jairo0811/BonitaSoft/actions/workflows/dashboard-react-ci.yml/badge.svg" alt="Dashboard React CI" />
+</a>
+
+<br/><br/>
+
+**BPM · BPMN · REST Integration · Workflow Dashboard**
+
+</div>
+
+## 📌 Descripción
+
+**BonitaSoft** es el proyecto académico independiente del primer parcial de **Integración de Aplicaciones con Tecnología Open Source (ISO-815)** en la Universidad APEC (UNAPEC).
+
+El trabajo combina la investigación requerida sobre **Bonita / BonitaSoft BPM** con una demostración técnica reproducible: un proceso de solicitud de acceso, una API FastAPI que modela el workflow y un dashboard React conectado al flujo local.
+
+> **BonitaSoft corresponde exclusivamente a ISO-815.** [**SOAForge**](https://github.com/Jairo0811/SOA-Forge) corresponde exclusivamente a **ISO-810**.
+
+---
 
 ## 🎓 Información académica
 
@@ -11,6 +40,7 @@ Proyecto académico independiente para la asignatura **ISO-815 — Integración 
 | 👨‍🏫 Profesor | **Juan Pablo Valdez Reyes** |
 | 📅 Período académico | **Septiembre - Diciembre 2026** |
 | 📁 Primer parcial | **BonitaSoft BPM** |
+| 🧪 Entrega complementaria | **Investigación + demo BPM/API + dashboard funcional** |
 
 ### 👥 Equipo académico original
 
@@ -21,28 +51,26 @@ Proyecto académico independiente para la asignatura **ISO-815 — Integración 
 | 👨🏻‍💻 Eliandres Rodriguez Cepeda | A00112070 |
 | 👨🏻‍💻 Jorge Alexander Minier Terrero | A00105678 |
 
-> **BonitaSoft corresponde exclusivamente a ISO-815.** No forma parte de ISO-810. En particular, **Eliandres Rodriguez Cepeda participa en ISO-815 y no pertenece a ISO-810**.
+> **Eliandres Rodriguez Cepeda participa en BonitaSoft / ISO-815 y no pertenece a SOAForge / ISO-810.**
 
-> Este repositorio se mantiene separado de [**SOAForge**](https://github.com/Jairo0811/SOA-Forge). **SOAForge corresponde exclusivamente a ISO-810**, mientras BonitaSoft corresponde exclusivamente a **ISO-815**.
+---
 
 ## 🧭 Continuidad académica
 
-BonitaSoft presenta continuidad por estudiante, continuidad por profesor y una relación académica paralela con SOAForge durante el mismo período, pero en **asignaturas diferentes**.
-
 ### 👥 Continuidad por estudiante
 
-**Eliandres Rodriguez Cepeda (A00112070)** participó previamente junto a Francis Jairo Matias Rosario en [**Kognia**](https://github.com/Jairo0811/Kognia), correspondiente a **Gestión de Sitios Web (ISO-700)** durante **Mayo - Agosto 2024**. En **Septiembre - Diciembre 2026**, ambos vuelven a coincidir en **BonitaSoft**, correspondiente a **Integración de Aplicaciones con Tecnología Open Source (ISO-815)**.
+**Eliandres Rodriguez Cepeda (A00112070)** participó previamente junto a Francis Jairo Matias Rosario en [**Kognia**](https://github.com/Jairo0811/Kognia), correspondiente a **Gestión de Sitios Web (ISO-700)** durante **Mayo - Agosto 2024**. Ambos vuelven a coincidir en **BonitaSoft / ISO-815** durante **Septiembre - Diciembre 2026**.
 
 | Orden | Asignatura | Proyecto | Período |
 |---:|---|---|---|
 | 1 | Gestión de Sitios Web (ISO-700) | [**Kognia**](https://github.com/Jairo0811/Kognia) | Mayo - Agosto 2024 |
 | 2 | Integración de Aplicaciones con Tecnología Open Source (ISO-815) | **BonitaSoft** | Septiembre - Diciembre 2026 |
 
-> **Eliandres participa en BonitaSoft (ISO-815) y no forma parte de SOAForge. SOAForge corresponde a ISO-810.**
+La relación es **académica y cronológica**. Kognia y BonitaSoft son proyectos independientes.
 
 ### 👨‍🏫 Continuidad por profesor
 
-El profesor **Juan Pablo Valdez Reyes** impartió previamente **Desarrollo de Software con Tecnología Open Source 2 (ISO-715)**, asignatura asociada a [**RentCarRD**](https://github.com/Jairo0811/RentCarRD), durante **Mayo - Agosto 2026**. En el período siguiente aparece como profesor de **SOAForge (ISO-810)** y **BonitaSoft (ISO-815)**.
+El profesor **Juan Pablo Valdez Reyes** impartió previamente **Desarrollo de Software con Tecnología Open Source 2 (ISO-715)**, asociada a [**RentCarRD**](https://github.com/Jairo0811/RentCarRD), durante **Mayo - Agosto 2026**. En el período siguiente imparte **SOAForge / ISO-810** y **BonitaSoft / ISO-815**.
 
 | Orden | Asignatura | Proyecto | Período |
 |---:|---|---|---|
@@ -50,75 +78,65 @@ El profesor **Juan Pablo Valdez Reyes** impartió previamente **Desarrollo de So
 | 2 | Integración de Aplicaciones con Tecnología Propietaria (ISO-810) | [**SOAForge**](https://github.com/Jairo0811/SOA-Forge) | Septiembre - Diciembre 2026 |
 | 3 | Integración de Aplicaciones con Tecnología Open Source (ISO-815) | **BonitaSoft** | Septiembre - Diciembre 2026 |
 
-Esta relación es **docente y formativa**. No implica que los proyectos sean versiones o dependencias técnicas entre sí.
-
 ### 🔀 Relación paralela con SOAForge
 
-Durante **Septiembre - Diciembre 2026**, BonitaSoft y SOAForge comparten:
+Durante **Septiembre - Diciembre 2026**, BonitaSoft y SOAForge comparten profesor, período académico y tres integrantes: **Enmanueli Alfonso Rondon Marrero**, **Francis Jairo Matias Rosario** y **Jorge Alexander Minier Terrero**.
 
-- el mismo profesor: **Juan Pablo Valdez Reyes**;
-- el mismo período académico;
-- tres integrantes en común: **Enmanueli Alfonso Rondon Marrero**, **Francis Jairo Matias Rosario** y **Jorge Alexander Minier Terrero**.
-
-Sin embargo, pertenecen a **asignaturas diferentes**:
+Sin embargo, son proyectos de asignaturas distintas:
 
 - **SOAForge → ISO-810 — Integración de Aplicaciones con Tecnología Propietaria**;
 - **BonitaSoft → ISO-815 — Integración de Aplicaciones con Tecnología Open Source**.
 
-**Eliandres Rodriguez Cepeda participa únicamente en BonitaSoft / ISO-815 y no pertenece al equipo de SOAForge / ISO-810.**
+**Eliandres Rodriguez Cepeda participa únicamente en BonitaSoft / ISO-815.**
+
+---
 
 ## 🎯 Alcance del primer parcial
 
-La **Práctica 3** solicita una investigación sobre BonitaSoft que cubre 11 puntos: SOA, BPM, historia, características, módulos, componentes, competidores, infraestructura para 500 usuarios, elementos SOA, costos para 500 usuarios y aspectos adicionales.
+La **Práctica 3** solicita una investigación sobre BonitaSoft que cubre 11 puntos:
 
-Los 11 puntos están documentados en [`docs/research/`](docs/research/).
+1. introducción a SOA;
+2. introducción a BPM;
+3. historia y evolución;
+4. características principales;
+5. módulos de la aplicación;
+6. componentes principales;
+7. competidores;
+8. infraestructura para aproximadamente 500 usuarios;
+9. elementos usuales de una solución SOA con la herramienta;
+10. costos aproximados para 500 usuarios;
+11. otros aspectos relevantes definidos por el grupo.
 
-Como complemento práctico, el repositorio prepara una demostración BPM para mostrar que Bonita puede actuar como orquestador de personas y servicios, sin convertir la demo en sustituto de la investigación solicitada.
+Los puntos de investigación se mantienen en [`docs/research/`](docs/research/).
+
+---
 
 ## 🔄 Proceso demostrativo
 
-**Solicitud de acceso a sistema corporativo**:
+La demo modela una **solicitud de acceso a sistema corporativo**:
 
 ```text
 Solicitud
    ↓
 Validación
    ↓
-Aprobación humana
+Aprobación / Rechazo
    ↓
 ¿Aprobada?
- ┌────┴──────────────────┐
- ▼                       ▼
-No                      Sí
- │                       │
-Rechazo             REST /provision
- │                       │
- Fin               Cierre + Auditoría
+ ┌────┴─────────────────┐
+ ▼                      ▼
+No                     Sí
+ │                      │
+Rechazo            REST /provision
+ │                      │
+ Fin              Cierre + Auditoría
 ```
 
-La integración utiliza una API FastAPI local incluida en `demo/mock-api/`.
+La implementación local permite crear solicitudes, aprobarlas o rechazarlas, consultar su estado y mostrar estadísticas desde el dashboard React conectado a la API.
 
-## 🧪 Complemento técnico
-
-El repositorio incluye:
-
-- modelo BPMN 2.0 de referencia;
-- especificación de proceso;
-- BDM y contratos propuestos;
-- especificación de formularios;
-- configuración conceptual del REST Connector;
-- Mock API FastAPI;
-- Dockerfile;
-- pruebas automatizadas;
-- GitHub Actions para la Mock API;
-- casos de prueba end-to-end;
-- runbook de implementación en Bonita Studio;
-- guion de demo;
-- outline y fuentes de presentación.
+---
 
 ## 🧱 Stack tecnológico
-
-> **Estado del stack:** la Mock API y sus pruebas están implementadas y automatizadas. La configuración final del proceso dentro de Bonita Studio todavía requiere ejecución local, por lo que no se presenta como Runtime Verified.
 
 ### 🔄 BPM y modelado
 
@@ -128,10 +146,27 @@ El repositorio incluye:
 </p>
 
 - Bonita / Bonita Studio como plataforma BPM del ejercicio;
-- BPMN 2.0 para el proceso de referencia;
-- BDM, contratos, formularios, actores y conectores documentados para implementación local.
+- BPMN 2.0;
+- BDM, contratos, formularios, actores y conectores documentados para implementación.
 
-### ⚙️ Integración y Mock API
+> La ejecución final dentro de **Bonita Studio** todavía debe validarse localmente; por eso el proyecto no se marca como *Bonita Runtime Verified*.
+
+### 🎨 Dashboard web
+
+<p>
+  <img src="https://skillicons.dev/icons?i=react,ts,vite" alt="React, TypeScript y Vite" />
+</p>
+
+- React 19;
+- TypeScript 5.9;
+- Vite 7;
+- cliente API conectado al workflow local;
+- creación de solicitudes mediante modal;
+- controles de aprobación y rechazo;
+- estadísticas y estado del proceso;
+- estilos de dashboard funcionales.
+
+### ⚙️ Workflow API
 
 <p>
   <img src="https://skillicons.dev/icons?i=python,fastapi" alt="Python y FastAPI" />
@@ -141,8 +176,9 @@ El repositorio incluye:
 - Python;
 - FastAPI;
 - Uvicorn;
-- endpoint REST `/provision` para la demostración de integración;
-- documentación automática OpenAPI / Swagger.
+- endpoints de creación, aprobación, rechazo, provisionamiento y estadísticas;
+- documentación OpenAPI / Swagger;
+- pruebas automatizadas del flujo principal.
 
 ### 🧪 Calidad y DevOps
 
@@ -151,10 +187,31 @@ El repositorio incluye:
   <img src="https://img.shields.io/badge/pytest-Testing-0A9EDC?style=flat-square&logo=pytest&logoColor=white" alt="pytest" />
 </p>
 
-- pytest para la Mock API;
+- pytest para la API;
 - Docker / Dockerfile para el servicio auxiliar;
 - Git / GitHub;
-- GitHub Actions mediante `mock-api-ci.yml`.
+- `mock-api-ci.yml` para API y tests;
+- `dashboard-react-ci.yml` para dashboard React;
+- launcher PowerShell para desarrollo local.
+
+---
+
+## 🏗️ Arquitectura de la demo
+
+```text
+React Dashboard
+      ↓ HTTP / JSON
+FastAPI Workflow API
+      ↓
+Solicitud / Aprobación / Rechazo / Stats
+      ↓
+REST /provision
+
+Bonita Studio / BPMN
+      └── implementación académica del proceso y connector
+```
+
+El dashboard y la API forman una demostración local funcional. El modelado y configuración específica de Bonita se mantiene como capa académica separada hasta completar la validación dentro de Bonita Studio.
 
 ---
 
@@ -163,40 +220,56 @@ El repositorio incluye:
 ```text
 BonitaSoft/
 ├── .github/workflows/
+│   ├── dashboard-react-ci.yml
 │   └── mock-api-ci.yml
-├── README.md
+├── demo/
+│   ├── mock-api/
+│   ├── DEMO_SCRIPT.md
+│   └── TEST_CASES.md
 ├── docs/
 │   ├── academic/
 │   ├── architecture/
 │   ├── implementation/
-│   ├── research/          # 11 puntos de la práctica
+│   ├── research/
 │   └── ROADMAP.md
 ├── process/
 │   ├── bpmn/
 │   ├── forms/
 │   └── connectors/
-├── demo/
-│   ├── mock-api/
-│   ├── DEMO_SCRIPT.md
-│   └── TEST_CASES.md
+├── scripts/
+│   └── start-local.ps1
+├── ui/
+│   └── dashboard-react/
 ├── presentation/
-│   ├── OUTLINE.md
-│   └── SOURCES.md
-├── assets/
-└── .gitignore
+└── README.md
 ```
 
-## 🚀 Mock API
+---
+
+## 🚀 Ejecución local
+
+### Inicio rápido en Windows
+
+```powershell
+.\scripts\start-local.ps1
+```
+
+El launcher prepara la ejecución local de la API y el dashboard.
+
+### API manual
 
 ```bash
 cd demo/mock-api
 python -m venv .venv
-# activar el entorno
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```
 
-Swagger: `http://localhost:8000/docs`
+Swagger:
+
+```text
+http://localhost:8000/docs
+```
 
 Pruebas:
 
@@ -205,21 +278,44 @@ pip install -r requirements-dev.txt
 pytest -q
 ```
 
-## 📊 Estado
+### Dashboard manual
+
+```bash
+cd ui/dashboard-react
+npm install
+npm run dev
+```
+
+---
+
+## 📊 Estado actual
 
 | Área | Estado |
-|---|---|
-| Fase 0 — Inicialización | ✅ Completa |
-| Investigación — 11 puntos | ✅ Completa |
+|---|:---:|
+| Información académica y continuidad | ✅ |
+| Investigación — 11 puntos | ✅ |
 | Diseño BPMN y arquitectura | ✅ Preparado |
-| FastAPI / integración auxiliar | ✅ Implementada |
-| Pruebas de Mock API + CI | ✅ Implementadas |
+| Workflow API FastAPI | ✅ Funcional |
+| Pruebas API | ✅ |
+| Dashboard React conectado | ✅ Funcional |
+| Crear / aprobar / rechazar solicitudes | ✅ |
+| Estadísticas del workflow | ✅ |
+| CI de Mock API | ✅ |
+| CI de Dashboard React | ✅ |
+| Launcher local Windows | ✅ |
 | Guion / presentación | ✅ Preparados |
-| Configuración final en Bonita Studio | 🟡 Requiere ejecución local |
-| Evidencias end-to-end de Bonita | 🟡 Pendientes del runtime |
+| Configuración final en Bonita Studio | 🟡 Requiere validación local |
+| Evidencia end-to-end del runtime Bonita | 🟡 Pendiente |
 
-### Importante
+### Gate pendiente
 
-No se marca el proyecto como **Runtime Verified** hasta ejecutar el proceso dentro de Bonita Studio. El archivo BPMN del repositorio es un modelo estándar de referencia; la configuración propia de Bonita —BDM, contratos, actores, formularios y connector— debe aplicarse y validarse en Studio siguiendo [`docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md`](docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md).
+No se marca como **Bonita Runtime Verified** hasta ejecutar y validar el proceso dentro de Bonita Studio con BDM, contratos, actores, formularios y connector configurados según [`docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md`](docs/implementation/BONITA_STUDIO_IMPLEMENTATION.md).
 
-Consulta [`docs/ROADMAP.md`](docs/ROADMAP.md) para el detalle de fases y gates de cierre.
+Consulta [`docs/ROADMAP.md`](docs/ROADMAP.md) para el detalle del cierre académico.
+
+---
+
+<p align="center">
+  <strong>BonitaSoft · BPM + Integración + Workflow Demo</strong><br/>
+  Universidad APEC (UNAPEC) · ISO-815 · Septiembre - Diciembre 2026
+</p>
